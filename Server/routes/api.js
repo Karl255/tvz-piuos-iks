@@ -19,6 +19,30 @@ module.exports = function(express, pool, jwt, secret) {
       }
     });
 
+    apiRouter.route('/login').post(async function (req, res) {
+      console.log(req.body);
+      try {
+        let rows = await pool.query('SELECT * FROM korisnik WHERE Username = ?', [req.body.username], async function(error, results, fields) {
+          if (results.length>0 && await bcrypt.compare(req.body.password, results[0].Password)) {
+            const token = jwt.sign({
+              username:results[0].username,
+              id:results[0].id,
+          }, secret, {
+              expiresIn:3600
+          });
+          res.json({status: 200, token:token, user:results[0]});
+          }
+          else {
+            res.json({status: 100, description: 'Username or password is wrong!'});
+          }
+          if (error) throw error;
+        });
+
+      } catch (e) {
+        res.json("Error with querry!");
+      }
+    })
+
 
 
 
