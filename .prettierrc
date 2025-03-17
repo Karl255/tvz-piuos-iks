@@ -1,5 +1,6 @@
 {
     "printWidth": 120,
     "tabWidth": 4,
-    "plugins": ["prettier-plugin-react"]
+    "plugins": ["prettier-plugin-react"],
+    "singleQuote": true
 }

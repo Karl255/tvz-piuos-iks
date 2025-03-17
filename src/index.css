@@ -3,9 +3,15 @@
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    --primary-color: #80d7f6;
+    --black: #303036;
+    --black-darker: #242428;
+    --white: #f4f4f5;
+
+    --box-shadow: 0px 5px 10px var(--black-darker);
+
+    background-color: var(--black);
+    color: var(--white);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -15,4 +21,25 @@
 
 body {
     margin: 0;
+}
+
+h3 {
+    color: var(--primary-color);
+    margin: 0 0 0.5em 0;
+}
+
+.MuiTab-root {
+    color: var(--wite) !important;
+}
+.MuiTab-root.Mui-selected {
+    color: var(--primary-color) !important;
+}
+
+.postIcon {
+    font-size: 1.2em;
+    color: var(--white);
+}
+
+.postIcon:hover {
+    cursor: pointer;
 }

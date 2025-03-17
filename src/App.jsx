@@ -1,17 +1,16 @@
-import { StrictMode } from "react";
-import { BrowserRouter, Route, Routes } from "react-router";
-import { Foo } from "./pages/Foo";
-import { Bar } from "./pages/Bar";
+import React, { StrictMode } from 'react';
+import { BrowserRouter } from 'react-router';
+import { Navigation } from './pages/Navigation';
+import { ObjaveContextProvider } from './contexts/ObjaveContextProvider';
 
 function App() {
     return (
         <StrictMode>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Foo />} />
-                    <Route path="/bar" element={<Bar />} />
-                </Routes>
-            </BrowserRouter>
+            <ObjaveContextProvider>
+                <BrowserRouter>
+                    <Navigation />
+                </BrowserRouter>
+            </ObjaveContextProvider>
         </StrictMode>
     );
 }

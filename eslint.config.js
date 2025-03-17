@@ -1,32 +1,27 @@
-import js from "@eslint/js";
-import globals from "globals";
-import prettierRecommended from "eslint-plugin-prettier/recommended";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import pluginReact from 'eslint-plugin-react';
+import pluginPrettier from 'eslint-plugin-prettier'; // ✅ Import Prettier plugin
+import configPrettier from 'eslint-config-prettier'; // ✅ Import Prettier config
 
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
-    prettierRecommended,
-    { ignores: ["dist"] },
+    { files: ['**/*.{js,mjs,cjs,jsx}'] },
+    { languageOptions: { globals: globals.browser } },
+    pluginJs.configs.recommended,
+    pluginReact.configs.flat.recommended,
+    configPrettier, // ✅ Add Prettier config to override conflicting rules
     {
-        files: ["**/*.{js,jsx}"],
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
-            parserOptions: {
-                ecmaVersion: "latest",
-                ecmaFeatures: { jsx: true },
-                sourceType: "module",
+        plugins: { prettier: pluginPrettier }, // ✅ Register Prettier plugin
+        settings: {
+            react: {
+                version: 'detect',
             },
         },
-        plugins: {
-            "react-hooks": reactHooks,
-            "react-refresh": reactRefresh,
-        },
         rules: {
-            ...js.configs.recommended.rules,
-            ...reactHooks.configs.recommended.rules,
-            "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
-            "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+            'no-unused-vars': 'warn',
+            quotes: 'off',
+            'prettier/prettier': 'warn', // ✅ Prettier rule now works correctly
         },
     },
 ];

@@ -1,0 +1,25 @@
+{
+    "objava": [
+        {
+            "idObjava": "1",
+            "idKorisnik": "1",
+            "tekstObjava": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+            "visibility": 0,
+            "datumObjave": "18-3-2025"
+        },
+        {
+            "idObjava": "2",
+            "idKorisnik": "1",
+            "tekstObjava": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis metus eget nulla pharetra sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque placerat id massa eu convallis. Quisque rhoncus erat ut orci rhoncus iaculis. Sed dapibus posuere dapibus. Phasellus nulla turpis, rutrum ac sagittis non, euismod vel enim. Etiam orci dui, maximus vitae ultrices sed, tristique rhoncus leo.",
+            "visibility": 0,
+            "datumObjave": "18-3-2025"
+        },
+        {
+            "idObjava": "1",
+            "idKorisnik": "1",
+            "tekstObjava": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+            "visibility": 0,
+            "datumObjave": "18-3-2025"
+        }
+    ]
+}
