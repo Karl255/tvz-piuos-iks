@@ -1,0 +1,24 @@
+.postIcon {
+    color: var(--white);
+    transition: var(--transition);
+}
+
+.postIcon + span {
+    margin-left: 0.3em;
+    cursor: default;
+}
+
+.postIcon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: var(--transition);
+}
+.postIcon:active {
+    transform: scale(1);
+    transform: calc(var(--transition) / 2);
+}
+
+.bottomBar span {
+    display: flex;
+    vertical-align: middle;
+}

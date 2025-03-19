@@ -4,11 +4,15 @@
     font-weight: 400;
 
     --primary-color: #80d7f6;
+    --secondary-color: #b1374c;
     --black: #303036;
     --black-darker: #242428;
     --white: #f4f4f5;
+    --gray: #9f9fa8;
 
     --box-shadow: 0px 5px 10px var(--black-darker);
+
+    --transition: 0.33s;
 
     background-color: var(--black);
     color: var(--white);
@@ -28,18 +32,17 @@ h3 {
     margin: 0 0 0.5em 0;
 }
 
-.MuiTab-root {
+/* .MuiTab-root {
     color: var(--wite) !important;
 }
 .MuiTab-root.Mui-selected {
     color: var(--primary-color) !important;
-}
+} */
 
-.postIcon {
-    font-size: 1.2em;
-    color: var(--white);
-}
-
-.postIcon:hover {
-    cursor: pointer;
+.section {
+    padding: 1em;
+    margin: 1em 0;
+    border: 3px solid var(--black-darker);
+    border-radius: 1em;
+    box-shadow: var(--box-shadow);
 }

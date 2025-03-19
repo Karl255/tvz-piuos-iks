@@ -3,7 +3,9 @@ import { useContext } from 'react';
 import { ObjaveContext } from '../../contexts/ObjaveContext';
 import { Post } from './Post';
 
-export function Feed() {
+import './FrontPage.css';
+
+export function Home() {
     const { objave } = useContext(ObjaveContext);
     return (
         <>
