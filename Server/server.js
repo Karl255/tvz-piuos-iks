@@ -21,6 +21,9 @@ app.use(cors())
 const apiRouter = require('./routes/api')(express, pool, jwt, config.secret);
 app.use('/api', apiRouter);
 
+const authRouter = require('./routes/auth')(express, pool, jwt, config.secret);
+app.use('/api/auth', authRouter);
+
 
 
 //pokretanje servera na portu 8080, promjeniti u config.js ako je potrebno
