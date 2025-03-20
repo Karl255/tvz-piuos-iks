@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
 import { Container, Box } from '@mui/material';
+
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -17,7 +19,7 @@ export function Post({ post }) {
     function pressLike() {
         setLiked((prevLiked) => {
             const newLiked = !prevLiked;
-            setLikes(newLiked ? post.likes + 1 : post.likes); // Update likes properly
+            setLikes(newLiked ? post.likes + 1 : post.likes);
             return newLiked;
         });
     }
@@ -28,8 +30,6 @@ export function Post({ post }) {
             return newDisliked;
         });
     }
-
-    // useEffect(() => {}, [liked]);
 
     return (
         <Container className="section">
