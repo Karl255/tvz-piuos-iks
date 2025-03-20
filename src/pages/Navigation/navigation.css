@@ -14,12 +14,9 @@ nav span {
 
     display: flex;
     align-items: center;
+    justify-content: center;
 
     transition: var(--transition);
-}
-
-nav span * {
-    margin-left: 1em;
 }
 
 nav span:hover {

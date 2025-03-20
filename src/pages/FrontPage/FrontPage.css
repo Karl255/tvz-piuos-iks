@@ -1,6 +1,56 @@
+/*Sort & Filter*/
+
+.filterSortBar {
+    margin-top: 1em;
+    border-radius: var(--border-radius);
+    background-color: var(--black-darker);
+    box-shadow: var(--box-shadow);
+    padding: 0.5em;
+    display: flex;
+    justify-content: right;
+    vertical-align: middle;
+}
+.filterSortBar span {
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+}
+.filterSortBar span * {
+    margin: 0;
+}
+
+button {
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--gray);
+    border: 2px solid var(--black-darker);
+    border: 1.5px solid var(--gray);
+    font-size: 0.9em;
+    box-shadow: var(--box-shadow);
+    padding: var(--button-padding);
+    cursor: pointer;
+    margin-left: 0.5em;
+}
+button:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+button:active {
+    color: var(--gray);
+    border-color: var(--gray);
+    transform: scale(0.95);
+}
+
+.buttonSelected,
+.buttonSelected:hover {
+    color: var(--white);
+    border-color: var(--white);
+}
+
+/*Post*/
+
 .postIcon {
     color: var(--white);
-    transition: var(--transition);
 }
 
 .postIcon + span {
@@ -11,11 +61,9 @@
 .postIcon:hover {
     cursor: pointer;
     transform: scale(1.1);
-    transition: var(--transition);
 }
 .postIcon:active {
     transform: scale(1);
-    transform: calc(var(--transition) / 2);
 }
 
 .bottomBar span {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router';
 
 import { Home } from '../FrontPage/Home';
-import { Messages } from '../Messaging/Messages';
+import { Inbox } from '../Inbox/Inbox';
 import { Profile } from '../Profile/Profile';
 
 import ChatIcon from '@mui/icons-material/Chat';
@@ -31,13 +31,13 @@ export function Navigation() {
         <Container maxWidth="md">
             <nav>
                 <span onClick={() => setRoute('/')} style={{ borderBottomColor: page == '/' ? colors[0] : colors[1] }}>
-                    <HomeIcon sx={{ transform: 'scale(0.95) translateY(2px)' }} className="icon" /> Home
+                    <HomeIcon sx={{ transform: 'scale(0.95))' }} className="icon" /> iks
                 </span>
                 <span
-                    onClick={() => setRoute('/messages')}
-                    style={{ borderBottomColor: page == '/messages' ? colors[0] : colors[1] }}
+                    onClick={() => setRoute('/inbox')}
+                    style={{ borderBottomColor: page == '/inbox' ? colors[0] : colors[1] }}
                 >
-                    <ChatIcon sx={{ transform: 'scale(0.9) translateY(3px)' }} className="icon" /> Messages
+                    <ChatIcon sx={{ transform: 'scale(0.9) translateY(3px)' }} className="icon" /> Inbox
                 </span>
                 <span
                     onClick={() => setRoute('/profile')}
@@ -49,7 +49,7 @@ export function Navigation() {
             </nav>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/messages" element={<Messages />} />
+                <Route path="/inbox" element={<Inbox />} />
                 <Route path="/profile" element={<Profile />} />
             </Routes>
         </Container>

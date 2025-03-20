@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
 import { Container, Box } from '@mui/material';
+
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 export function Post({ post }) {
@@ -17,7 +18,7 @@ export function Post({ post }) {
     function pressLike() {
         setLiked((prevLiked) => {
             const newLiked = !prevLiked;
-            setLikes(newLiked ? post.likes + 1 : post.likes); // Update likes properly
+            setLikes(newLiked ? post.likes + 1 : post.likes);
             return newLiked;
         });
     }
@@ -28,8 +29,6 @@ export function Post({ post }) {
             return newDisliked;
         });
     }
-
-    // useEffect(() => {}, [liked]);
 
     return (
         <Container className="section">
@@ -52,15 +51,24 @@ export function Post({ post }) {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }} className="bottomBar">
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '25%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '15%' }}>
                     <span>
-                        <span className="postIcon" onClick={pressLike}>
-                            {liked ? <ThumbUpIcon sx={{ color: 'var(--primary-color)' }} /> : <ThumbUpOffAltIcon />}
+                        <span className="postIcon transition" onClick={pressLike}>
+                            {liked ? (
+                                <ThumbUpIcon
+                                    sx={{
+                                        color: 'var(--primary-color)',
+                                        opacity: liked ? '100%' : '0',
+                                    }}
+                                />
+                            ) : (
+                                <ThumbUpOffAltIcon sx={{ opacity: liked ? '0' : '100%' }} />
+                            )}
                         </span>
                         <span>{likes}</span>
                     </span>
                     <span>
-                        <span className="postIcon" onClick={pressDislike}>
+                        <span className="postIcon transition" onClick={pressDislike}>
                             {disliked ? (
                                 <ThumbDownIcon sx={{ color: 'var(--secondary-color)' }} />
                             ) : (
@@ -69,11 +77,10 @@ export function Post({ post }) {
                         </span>
                         <span>{dislikes}</span>
                     </span>
-                    <TagFacesIcon className="postIcon" />
                 </Box>
                 <Box>
                     <span>
-                        <ChatBubbleOutlineIcon className="postIcon" /> <span>{post.comments}</span>
+                        <ChatBubbleOutlineIcon className="postIcon transition" /> <span>{post.comments}</span>
                     </span>
                 </Box>
             </Box>

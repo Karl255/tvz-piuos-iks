@@ -1,0 +1,10 @@
+table {
+    margin-top: 1em;
+}
+td:first-child {
+    color: var(--gray);
+    padding-right: 1em;
+}
+.profile {
+    cursor: default;
+}
