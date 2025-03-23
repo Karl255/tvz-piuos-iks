@@ -1,0 +1,31 @@
+.profile {
+    cursor: default;
+}
+
+.followersBar {
+    display: flex;
+    flex-direction: row;
+}
+.followersBar > * {
+    background-color: var(--background-darker);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    padding: var(--button-padding);
+    margin-right: 0.5em;
+}
+
+.userInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    width: 33%;
+
+    margin-top: 1em;
+}
+.userInfo > div {
+    margin-top: 0.5em;
+}
+.userInfo > div:nth-child(odd) {
+    color: var(--text-darker);
+}
