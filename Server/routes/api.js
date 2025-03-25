@@ -39,7 +39,7 @@ module.exports = function(express, pool, jwt, secret) {
 
 
 
-    apiRouter.route('/objave').get(async function (req,res){
+    apiRouter.route('/objave').post(async function (req,res){
       try {
         let rows = await pool.query('call GetPost(?)', [req.body.idKorisnik], function (error, results, fields) {
           res.status(200).json(results[0]);
@@ -49,7 +49,7 @@ module.exports = function(express, pool, jwt, secret) {
       }
     });
 
-    apiRouter.route('/objavepratitelja').get(async function (req,res){
+    apiRouter.route('/objavepratitelja').post(async function (req,res){
       try {
         let rows = await pool.query('call GetPostFollowed(?)', [req.body.idKorisnik], function (error, results, fields) {
           res.status(200).json(results[0]);
