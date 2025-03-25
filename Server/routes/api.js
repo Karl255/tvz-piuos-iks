@@ -7,75 +7,95 @@ module.exports = function(express, pool, jwt, secret) {
     });
 
 
-
-
-    apiRouter.route('/users').get(async function (req,res){
+    apiRouter.route('/makepost').post(async function (req,res){
       try {
-        let rows = await pool.query('SELECT * FROM korisnik', function (error, results, fields) {
-          res.status(200).json({results})
+        let rows = await pool.query('call MakePost(?, ?, ?)', [req.body.idKorisnik, req.body.content, req.body.visibility], function (error, results, fields) {
+          res.status(200).send('Success!');
         })
       } catch (e) {
         res.status(400).send('Bad request');
       }
     });
 
-    apiRouter.route('/komentari').get(async function (req,res){
+    apiRouter.route('/makecomment').post(async function (req,res){
       try {
-        let rows = await pool.query('SELECT * FROM komentar', function (error, results, fields) {
-          res.json({results})
+        let rows = await pool.query('call MakeComment(?, ?, ?)', [req.body.idKorisnik, req.body.idPost, req.body.content], function (error, results, fields) {
+          res.status(200).send('Success!');
         })
       } catch (e) {
         res.status(400).send('Bad request');
       }
     });
+
+    apiRouter.route('/follow').post(async function (req,res){
+      try {
+        let rows = await pool.query('call Follow(?, ?)', [req.body.idKorisnik, req.body.idZapratiti], function (error, results, fields) {
+          res.status(200).send('Success!');
+        })
+      } catch (e) {
+        res.status(400).send('Bad request');
+      }
+    });
+
+
 
     apiRouter.route('/objave').get(async function (req,res){
       try {
-        let rows = await pool.query('SELECT * FROM objava', function (error, results, fields) {
-          res.json({results})
+        let rows = await pool.query('call GetPost(?)', [req.body.idKorisnik], function (error, results, fields) {
+          res.status(200).json(results[0]);
         })
       } catch (e) {
         res.status(400).send('Bad request');
       }
     });
 
-    apiRouter.route('/ld').get(async function (req,res){
+    apiRouter.route('/objavepratitelja').get(async function (req,res){
       try {
-        let rows = await pool.query('SELECT * FROM objavalikedislike', function (error, results, fields) {
-          res.json({results})
+        let rows = await pool.query('call GetPostFollowed(?)', [req.body.idKorisnik], function (error, results, fields) {
+          res.status(200).json(results[0]);
         })
       } catch (e) {
         res.status(400).send('Bad request');
       }
     });
 
-    apiRouter.route('/poruke').get(async function (req,res){
+    apiRouter.route('/profile').post(async function (req, res) {
       try {
-        let rows = await pool.query('SELECT * FROM poruka', function (error, results, fields) {
-          res.json({results})
-        })
-      } catch (e) {
-        res.status(400).send('Bad request');
+        let rows = await pool.query('call GetProfile(?)', [req.body.idKorisnik], function(error, results, fields) {
+          res.status(200).json(results[0][0]);
+        });
+      } catch(e){
+          res.status(400).send('Bad request');
       }
     });
 
-    apiRouter.route('/pratitelji').get(async function (req,res){
+    apiRouter.route('/followers').post(async function (req, res) {
       try {
-        let rows = await pool.query('SELECT * FROM pratitelji', function (error, results, fields) {
-          res.json({results})
-        })
-      } catch (e) {
-        res.status(400).send('Bad request');
+        let rows = await pool.query('call GetFollowers(?)', [req.body.idKorisnik], function(error, results, fields) {
+          res.status(200).json(results[0]);
+        });
+      } catch(e){
+          res.status(400).send('Bad request');
       }
     });
 
-    apiRouter.route('/razgovori').get(async function (req,res){
+    apiRouter.route('/followed').post(async function (req, res) {
       try {
-        let rows = await pool.query('SELECT * FROM razgovor', function (error, results, fields) {
-          res.json({results})
-        })
-      } catch (e) {
-        res.status(400).send('Bad request');
+        let rows = await pool.query('call GetFollowed(?)', [req.body.idKorisnik], function(error, results, fields) {
+          res.status(200).json(results[0]);
+        });
+      } catch(e){
+          res.status(400).send('Bad request');
+      }
+    });
+
+    apiRouter.route('/comments').post(async function (req, res) {
+      try {
+        let rows = await pool.query('call GetComments(?)', [req.body.idObjava], function(error, results, fields) {
+          res.status(200).json(results[0]);
+        });
+      } catch(e){
+          res.status(400).send('Bad request');
       }
     });
     return apiRouter;
