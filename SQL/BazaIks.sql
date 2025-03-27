@@ -148,7 +148,7 @@ CREATE TABLE `user` (
   `DateOfBirth` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,13 +306,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfile`(idUser INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfile`(idUser_ INT)
 BEGIN
-	SELECT u.Username, u.Name, u.Surname, u.DateOfBirth, COUNT(f.idFollowed) as Followers, COUNT(p.idFollowed) as Following FROM user u
-    LEFT OUTER JOIN follower p ON p.idFollower = u.id
-    LEFT OUTER JOIN follower f on f.idFollowed = u.id
-    where u.id = idUser
-    GROUP BY u.id;
+    SELECT u.Username, u.Name, u.Surname, u.DateOfBirth, (SELECT count(*) FROM follower f
+    WHERE f.idFollower=idUser_) as Following, 
+    (SELECT count(*) FROM follower f
+    WHERE f.idFollowed=idUser_) as Followers FROM user u WHERE u.id = idUser_;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -390,4 +389,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 21:49:32
+-- Dump completed on 2025-03-27 22:15:38
