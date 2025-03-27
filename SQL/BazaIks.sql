@@ -51,7 +51,7 @@ CREATE TABLE `comment` (
   KEY `fk_Komentar_Objava1_idx` (`idPost`),
   CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Komentar_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `follower` (
   KEY `fk_Pratitelji_Korisnik2_idx` (`idFollowed`),
   CONSTRAINT `fk_Pratitelji_Korisnik1` FOREIGN KEY (`idFollower`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Pratitelji_Korisnik2` FOREIGN KEY (`idFollowed`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   KEY `fk_Objava_Korisnik_idx` (`idUser`),
   CONSTRAINT `fk_Objava_Korisnik` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE `user` (
   `DateOfBirth` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,14 +250,17 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPost`(idUser INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPost`(idUser_ INT)
 BEGIN
-	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.Value)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
-	LEFT OUTER JOIN rating r ON r.idPost
-    LEFT OUTER JOIN follower f ON f.idFollowed = u.id
-    WHERE p.Visibility = "public" OR (p.Visibility = "followers" AND f.idFollower = idUser)
+	LEFT OUTER JOIN rating r ON r.idPost = p.id
+	WHERE p.Visibility = "public" OR (p.Visibility = "followers" 
+    AND u.id IN (SELECT f.idFollowed FROM follower f
+				JOIN user u ON f.idFollower = u.id
+				WHERE f.idFollower = idUser_
+				GROUP BY f.id))
 	GROUP BY p.id;
 END ;;
 DELIMITER ;
@@ -275,14 +278,17 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPostFollowed`(idUser INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPostFollowed`(idUser_ INT)
 BEGIN
-	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.Value)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
-	LEFT OUTER JOIN rating r ON r.idPost
-    LEFT OUTER JOIN follower f ON f.idFollowed=u.id
-    WHERE p.Visibility = "followers" AND f.idFollower = idUser
+	LEFT OUTER JOIN rating r ON r.idPost = p.id
+	WHERE p.Visibility = "followers" 
+    AND u.id IN (SELECT f.idFollowed FROM follower f
+				JOIN user u ON f.idFollower = u.id
+				WHERE f.idFollower = idUser_
+				GROUP BY f.id)
 	GROUP BY p.id;
 END ;;
 DELIMITER ;
@@ -384,4 +390,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 14:52:46
+-- Dump completed on 2025-03-27 21:49:32
