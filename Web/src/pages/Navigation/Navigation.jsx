@@ -5,7 +5,7 @@ import { Link, Route, Routes } from 'react-router';
 
 import { Home } from '../FrontPage/Home';
 import { Inbox } from '../Inbox/Inbox';
-import { Profile } from '../Profile/Profile';
+import { ProfilePage } from '../Profile/ProfilePage';
 
 import ChatIcon from '@mui/icons-material/Chat';
 import HomeIcon from '@mui/icons-material/Home';
@@ -44,7 +44,7 @@ export function Navigation() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/inbox" element={<Inbox />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<ProfilePage />} />
             </Routes>
         </Container>
     );
