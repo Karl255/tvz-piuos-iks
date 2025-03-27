@@ -49,6 +49,16 @@ module.exports = function(express, pool, jwt, secret) {
       }
     });
 
+    apiRouter.route('/profileposts').post(async function (req,res){
+      try {
+        let rows = await pool.query('call GetProfilePosts(?)', [req.body.idKorisnik], function (error, results, fields) {
+          res.status(200).json(results[0]);
+        })
+      } catch (e) {
+        res.status(400).send('Bad request');
+      }
+    });
+
     apiRouter.route('/objavepratitelja').post(async function (req,res){
       try {
         let rows = await pool.query('call GetPostFollowed(?)', [req.body.idKorisnik], function (error, results, fields) {
