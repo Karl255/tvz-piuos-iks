@@ -11,21 +11,20 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 export function Post({ post }) {
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(post.likes);
     const [disliked, setDisliked] = useState(false);
-    const [dislikes, setDislikes] = useState(post.dislikes);
+    const [postRating, setPostRating] = useState(post.PostRating);
 
     function pressLike() {
         setLiked((prevLiked) => {
             const newLiked = !prevLiked;
-            setLikes(newLiked ? post.likes + 1 : post.likes);
+            setPostRating(newLiked ? postRating + 1 : postRating - 1);
             return newLiked;
         });
     }
     function pressDislike() {
         setDisliked((prevDisliked) => {
             const newDisliked = !prevDisliked;
-            setDislikes(newDisliked ? post.dislikes + 1 : post.dislikes);
+            setPostRating(newDisliked ? postRating - 1 : postRating + 1);
             return newDisliked;
         });
     }
@@ -36,7 +35,10 @@ export function Post({ post }) {
                 <div style={{ fontWeight: 'bold', color: 'var(--primary-color)', cursor: 'default' }}>
                     {post.username}
                 </div>
-                <div style={{ color: 'var(--gray)' }}> {post.datumObjave}</div>
+                <div style={{ color: 'var(--text-darker)' }}>
+                    {' '}
+                    {post.DateOfPosting && post.DateOfPosting.slice(0, 10)}
+                </div>
             </Box>
 
             <Box
@@ -47,7 +49,7 @@ export function Post({ post }) {
                     backgroundColor: 'var(--background-darker)',
                 }}
             >
-                {post.tekstObjava}
+                {post.Content}
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }} className="bottomBar">
@@ -65,8 +67,8 @@ export function Post({ post }) {
                                 <ThumbUpOffAltIcon sx={{ opacity: liked ? '0' : '100%' }} />
                             )}
                         </div>
-                        <div>{likes}</div>
                     </div>
+                    <div>{postRating}</div>
                     <div>
                         <div className="postIcon transition" onClick={pressDislike}>
                             {disliked ? (
@@ -75,12 +77,11 @@ export function Post({ post }) {
                                 <ThumbDownOffAltIcon />
                             )}
                         </div>
-                        <div>{dislikes}</div>
                     </div>
                 </Box>
                 <Box>
                     <div>
-                        <ChatBubbleOutlineIcon className="postIcon transition" /> <span>{post.comments}</span>
+                        <ChatBubbleOutlineIcon className="postIcon transition" /> <div>{post.BrojKomentara}</div>
                     </div>
                 </Box>
             </Box>

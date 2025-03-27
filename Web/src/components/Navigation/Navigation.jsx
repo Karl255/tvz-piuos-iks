@@ -3,9 +3,9 @@ import { Container } from '@mui/material';
 import { useState } from 'react';
 import { Link, Route, Routes } from 'react-router';
 
-import { Home } from '../FrontPage/Home';
-import { Inbox } from '../Inbox/Inbox';
-import { ProfilePage } from '../Profile/ProfilePage';
+import { FrontPage } from '../../pages/FrontPage/FrontPage';
+import { Inbox } from '../../pages/Inbox/Inbox';
+import { ProfilePage } from '../../pages/Profile/ProfilePage';
 
 import ChatIcon from '@mui/icons-material/Chat';
 import HomeIcon from '@mui/icons-material/Home';
@@ -42,7 +42,7 @@ export function Navigation() {
                 </Link>
             </nav>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<FrontPage />} />
                 <Route path="/inbox" element={<Inbox />} />
                 <Route path="/profile" element={<ProfilePage />} />
             </Routes>

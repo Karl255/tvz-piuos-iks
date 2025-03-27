@@ -1,6 +1,6 @@
 import { Button, Container } from '@mui/material';
 import React, { useState } from 'react';
-import { Navigation } from '../Navigation/Navigation';
+import { Navigation } from '../../components/Navigation/Navigation';
 
 export function Login() {
     const [loggedIn, setLoggedIn] = useState(false);

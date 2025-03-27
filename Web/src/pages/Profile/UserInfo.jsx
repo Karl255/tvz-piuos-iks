@@ -19,7 +19,7 @@ export function UserInfo({ user }) {
                 <div>{user.Name}</div>
 
                 <div>Last name:</div>
-                <div>{user.Surename}</div>
+                <div>{user.Surname}</div>
 
                 <div>Date of birth:</div>
                 <div>{user.DateOfBirth}</div>

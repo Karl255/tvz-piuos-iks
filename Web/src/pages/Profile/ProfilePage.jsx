@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { UserInfo } from './UserInfo';
 
 import './Profile.css';
+import { Post } from '../../components/Post/Post';
 
 export function ProfilePage() {
     const [user, setUser] = useState({});
-    async function fetchData() {
+    const [posts, setPosts] = useState([]);
+    async function fetchData(route, setter) {
         try {
-            let response = await fetch('http://localhost:8080/api/profile', {
+            let response = await fetch(`http://localhost:8080/api/${route}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idKorisnik: 1 }),
+                body: JSON.stringify({ idKorisnik: 4 }),
             });
 
             let res = await response.json();
-            setUser(res);
-            console.log(res);
+            setter(res);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -25,14 +26,19 @@ export function ProfilePage() {
 
     useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData();
+            await fetchData('profile', setUser);
+            await fetchData('profileposts', setPosts);
         };
         fetchDataAsync();
+        console.log(posts);
     }, []);
 
     return (
         <>
             <UserInfo user={user} />
+            {posts.map((post) => {
+                return <Post key={post.content} post={post} />;
+            })}
         </>
     );
 }
