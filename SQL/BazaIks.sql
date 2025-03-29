@@ -185,7 +185,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetComments`(idPost INT)
 BEGIN
-	SELECT u.Username, c.Content FROM comment c
+	SELECT u.id, u.Username, c.Content FROM comment c
 	LEFT OUTER JOIN post p on c.idPost=p.id
 	LEFT OUTER JOIN user u on u.id = c.idUser
 	WHERE c.id = idPost
@@ -208,7 +208,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetFollowed`(idUser INT)
 BEGIN
-	SELECT u.Username, u.Name, u.Surname FROM follower f
+	SELECT u.id, u.Username, u.Name, u.Surname FROM follower f
 	LEFT OUTER JOIN user u on u.id = f.idFollowed
 	WHERE f.idFollower = idUser
     GROUP BY f.idFollowed;
@@ -230,7 +230,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetFollowers`(idUser INT)
 BEGIN
-	SELECT u.Username, u.Name, u.Surname FROM follower f
+	SELECT u.id, u.Username, u.Name, u.Surname FROM follower f
 	LEFT OUTER JOIN user u on u.id = f.idFollower
     WHERE f.idFollowed = idUser
 	GROUP BY f.idFollower;
@@ -252,7 +252,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPost`(idUser_ INT)
 BEGIN
-	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
@@ -280,7 +280,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPostFollowed`(idUser_ INT)
 BEGIN
-	SELECT u.username, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
@@ -330,9 +330,12 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfilePosts`(idUser_ INT)
 BEGIN
-	SELECT p.Content, p.Visibility, p.DateOfPosting FROM post p
+	SELECT p.id, p.Content, p.Visibility, p.DateOfPosting, SUM(r.Value) as Rating, COUNT(kom.id) as Comments FROM post p
 	LEFT OUTER JOIN user u ON u.id = p.idUser
-	WHERE u.id = idUser_;
+    LEFT OUTER JOIN rating r ON r.idPost = p.id
+    LEFT OUTER JOIN comment kom ON kom.idPost = p.id
+	WHERE u.id = idUser_
+    GROUP BY p.id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -389,4 +392,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 22:15:38
+-- Dump completed on 2025-03-29 18:24:20
