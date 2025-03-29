@@ -8,7 +8,6 @@ import { Inbox } from '../../pages/Inbox/Inbox';
 import { ProfilePage } from '../../pages/Profile/ProfilePage';
 
 import ChatIcon from '@mui/icons-material/Chat';
-import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import './navigation.css';
@@ -23,7 +22,8 @@ export function Navigation() {
                     to={{ pathname: '/' }}
                     className={'link ' + (page == '/' && 'activePage')}
                 >
-                    <HomeIcon sx={{ transform: 'scale(0.95))' }} className="icon" /> iks
+                    {/* <HomeIcon sx={{ transform: 'scale(0.95))' }} className="icon" /> iks */}
+                    <img src="/logo-white.svg" alt="Iks logo" width="64" height="64" />
                 </Link>
                 <Link
                     onClick={() => setPage('/inbox')}
