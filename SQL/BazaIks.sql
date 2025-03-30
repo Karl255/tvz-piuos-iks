@@ -51,7 +51,7 @@ CREATE TABLE `comment` (
   KEY `fk_Komentar_Objava1_idx` (`idPost`),
   CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Komentar_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `follower` (
   KEY `fk_Pratitelji_Korisnik2_idx` (`idFollowed`),
   CONSTRAINT `fk_Pratitelji_Korisnik1` FOREIGN KEY (`idFollower`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Pratitelji_Korisnik2` FOREIGN KEY (`idFollowed`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   KEY `fk_Objava_Korisnik_idx` (`idUser`),
   CONSTRAINT `fk_Objava_Korisnik` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,6 @@ CREATE TABLE `rating` (
   `idUser` bigint NOT NULL,
   `Value` tinyint DEFAULT NULL,
   PRIMARY KEY (`idPost`,`idUser`),
-  UNIQUE KEY `Objava_idObjava_UNIQUE` (`idPost`),
   KEY `fk_ObjavaLikeDislike_Korisnik1_idx` (`idUser`),
   CONSTRAINT `fk_ObjavaLike_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`),
   CONSTRAINT `fk_ObjavaLikeDislike_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`)
@@ -144,11 +143,11 @@ CREATE TABLE `user` (
   `Username` varchar(45) DEFAULT NULL,
   `Password` text,
   `Name` varchar(45) DEFAULT NULL,
-  `Surname` varchar(45) DEFAULT NULL,
+  `Surename` varchar(45) DEFAULT NULL,
   `DateOfBirth` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +187,7 @@ BEGIN
 	SELECT u.id, u.Username, c.Content FROM comment c
 	LEFT OUTER JOIN post p on c.idPost=p.id
 	LEFT OUTER JOIN user u on u.id = c.idUser
-	WHERE c.id = idPost
+	WHERE c.idPost = idPost
 	GROUP BY c.id;
 END ;;
 DELIMITER ;
@@ -252,7 +251,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPost`(idUser_ INT)
 BEGIN
-	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.id as UserID, u.username as Username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
@@ -280,7 +279,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPostFollowed`(idUser_ INT)
 BEGIN
-	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS BrojKomentara, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS PostRating FROM post p
+	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
 	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
@@ -372,10 +371,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `MakePost`(idUser INT, content text, visibility varchar(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `MakePost`(idUser_ INT, content_ text, visibility_ varchar(10))
 BEGIN
 	INSERT INTO Post (idUser, Content, Visibility, DateOfPosting) 
-    VALUES (idUser, content, visibility, NOW());
+    VALUES (idUser_, content_, visibility_, NOW());
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -392,4 +391,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-29 18:24:20
+-- Dump completed on 2025-03-30 17:36:29
