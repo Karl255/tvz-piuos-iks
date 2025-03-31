@@ -19,6 +19,20 @@ module.exports = function (express, pool, jwt, secret) {
     }
   });
 
+  apiRouter.route("/makepost").post(async function (req, res) {
+    try {
+      let rows = await pool.query(
+        "call MakePost(?, ?, ?)",
+        [req.body.idKorisnik, req.body.content, req.body.visibility],
+        function (error, results, fields) {
+          res.status(200).json({ message: "Success!" });
+        }
+      );
+    } catch (e) {
+      res.status(400).json({ message: "Bad request" });
+    }
+  });
+
   apiRouter.route("/makecomment").post(async function (req, res) {
     try {
       let rows = await pool.query(
@@ -29,7 +43,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -39,11 +53,11 @@ module.exports = function (express, pool, jwt, secret) {
         "call Follow(?, ?)",
         [req.body.idKorisnik, req.body.idZapratiti],
         function (error, results, fields) {
-          res.status(200).send("Success!");
+          res.status(200).json({ message: "Success!" });
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -57,7 +71,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -71,7 +85,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -85,7 +99,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -99,7 +113,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -113,7 +127,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -127,7 +141,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
 
@@ -141,7 +155,7 @@ module.exports = function (express, pool, jwt, secret) {
         }
       );
     } catch (e) {
-      res.status(400).send("Bad request");
+      res.status(400).json({ message: "Bad request" });
     }
   });
   return apiRouter;

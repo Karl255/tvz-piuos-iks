@@ -18,12 +18,10 @@ export function Comments({ postId, numberOfComments, incrementComments }) {
                 body: JSON.stringify(body),
             });
             let res = await response.json();
-            console.log(res);
             if (route == 'comments') {
                 setComments(res);
                 setOpen(true);
             } else {
-                console.log('increment');
                 incrementComments();
                 setOpen(false);
             }
