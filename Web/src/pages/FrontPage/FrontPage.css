@@ -1,45 +1,19 @@
 /*Sort & Filter*/
-
-.filterSortBar {
+.frontPageBar {
     margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     border-radius: var(--border-radius);
     background-color: var(--background-darker);
     box-shadow: var(--box-shadow);
     padding: 0.5em;
+    gap: 0.5em;
+}
+.frontPageBar > * {
     display: flex;
-    justify-content: right;
+    flex-direction: row;
     vertical-align: middle;
-}
-.filterSortBar span {
-    font-size: 0.9em;
-    display: flex;
-    align-items: center;
-}
-.filterSortBar span * {
-    margin: 0;
-}
-
-button {
-    border-radius: var(--border-radius);
-    background-color: transparent;
-    color: var(--text-darker);
-    border: 2px solid var(--background-darker);
-    border: 1.5px solid var(--text-darker);
-    font-size: 0.9em;
-    padding: var(--button-padding);
-    cursor: pointer;
-    margin-left: 0.5em;
-
-    transition: var(--transition);
-}
-button:hover {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-button:active {
-    color: var(--text-darker);
-    border-color: var(--text-darker);
-    transform: scale(0.95);
 }
 
 .buttonSelected,

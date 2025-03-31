@@ -14,7 +14,7 @@ export function ProfilePage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idKorisnik: 4 }),
+                body: JSON.stringify({ idKorisnik: 5 }),
             });
 
             let res = await response.json();
@@ -30,14 +30,13 @@ export function ProfilePage() {
             await fetchData('profileposts', setPosts);
         };
         fetchDataAsync();
-        console.log(posts);
     }, []);
 
     return (
         <>
             <UserInfo user={user} />
-            {posts.map((post) => {
-                return <Post key={post.content} post={post} />;
+            {posts.map((post, i) => {
+                return <Post key={i} post={post} />;
             })}
         </>
     );

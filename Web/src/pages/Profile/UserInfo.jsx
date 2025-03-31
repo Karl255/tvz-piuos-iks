@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { UsersListModal } from './UsersListModal';
 
 export function UserInfo({ user }) {
     return (
@@ -10,8 +11,8 @@ export function UserInfo({ user }) {
                 {user.Username} <EditIcon sx={{ cursor: 'pointer' }} />
             </h2>
             <div className="followersBar">
-                <div>{user.Followers} followers</div>
-                <div>{user.Following} following</div>
+                <UsersListModal title={user.Followers + ' followers'} route={'followers'} />
+                <UsersListModal title={user.Following + ' following'} route={'followed'} />
             </div>
 
             <div className="userInfo">
@@ -22,7 +23,7 @@ export function UserInfo({ user }) {
                 <div>{user.Surname}</div>
 
                 <div>Date of birth:</div>
-                <div>{user.DateOfBirth}</div>
+                <div>{user.DateOfBirth && user.DateOfBirth.slice(0, 10)}</div>
             </div>
         </Container>
     );

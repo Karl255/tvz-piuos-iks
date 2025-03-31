@@ -11,7 +11,7 @@ module.exports = function (express, pool, jwt, secret) {
         "call MakePost(?, ?, ?)",
         [req.body.idKorisnik, req.body.content, req.body.visibility],
         function (error, results, fields) {
-          res.status(200).send("Success!");
+          res.status(200).json({ message: "Success!" });
         }
       );
     } catch (e) {
@@ -25,7 +25,7 @@ module.exports = function (express, pool, jwt, secret) {
         "call MakeComment(?, ?, ?)",
         [req.body.idKorisnik, req.body.idPost, req.body.content],
         function (error, results, fields) {
-          res.status(200).send("Success!");
+          res.status(200).json({ message: "Success!" });
         }
       );
     } catch (e) {

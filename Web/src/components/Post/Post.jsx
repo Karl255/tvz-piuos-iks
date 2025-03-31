@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, Box } from '@mui/material';
@@ -7,12 +7,13 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import { Comments } from './Comments';
 
 export function Post({ post }) {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
-    const [postRating, setPostRating] = useState(post.PostRating);
+    const [postRating, setPostRating] = useState(post.Rating);
+    const [numberOfComments, setNumberOfComments] = useState(post.Comments);
 
     function pressLike() {
         setLiked((prevLiked) => {
@@ -29,11 +30,19 @@ export function Post({ post }) {
         });
     }
 
+    useEffect(() => {
+        setPostRating(post.Rating);
+    }, [post]);
+
+    function incrementNumberOfComments() {
+        setNumberOfComments((prev) => prev + 1);
+    }
+
     return (
         <Container className="section">
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ fontWeight: 'bold', color: 'var(--primary-color)', cursor: 'default' }}>
-                    {post.username}
+                    {post.Username}
                 </div>
                 <div style={{ color: 'var(--text-darker)' }}>
                     {' '}
@@ -80,9 +89,11 @@ export function Post({ post }) {
                     </div>
                 </Box>
                 <Box>
-                    <div>
-                        <ChatBubbleOutlineIcon className="postIcon transition" /> <div>{post.BrojKomentara}</div>
-                    </div>
+                    <Comments
+                        numberOfComments={numberOfComments}
+                        postId={post.PostID}
+                        incrementComments={incrementNumberOfComments}
+                    />
                 </Box>
             </Box>
         </Container>

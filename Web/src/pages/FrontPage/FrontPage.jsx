@@ -5,11 +5,13 @@ import { Box } from '@mui/material';
 import { ObjaveContext } from '../../contexts/ObjaveContext';
 import { Post } from '../../components/Post/Post';
 import './FrontPage.css';
+import { NewPost } from '../../components/NewPost/NewPost';
 
 export function FrontPage() {
     const { objave } = useContext(ObjaveContext);
     const [posts, setPosts] = useState(objave);
-    const [sortKey, setSortKey] = useState('PostRating');
+    const [sortKey, setSortKey] = useState('Rating');
+    const [filter, setFilter] = useState('objave');
 
     function sortPosts() {
         setPosts(R.sort(R.descend(R.prop(sortKey)), posts));
@@ -25,7 +27,7 @@ export function FrontPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idKorisnik: 4 }),
+                body: JSON.stringify({ idKorisnik: 5 }),
             });
 
             let res = await response.json();
@@ -34,32 +36,45 @@ export function FrontPage() {
             console.error('Error:', error);
         }
     }
-
+    const fetchDataAsync = async (route) => {
+        await fetchData(route);
+        setFilter(route);
+    };
     useEffect(() => {
-        const fetchDataAsync = async () => {
-            await fetchData('objave');
-        };
-        fetchDataAsync();
+        fetchDataAsync('objave');
     }, []);
 
     return (
         <>
-            <Box className="filterSortBar">
-                <button
-                    onClick={() => setSortKey('PostRating')}
-                    className={sortKey == 'PostRating' && 'buttonSelected'}
-                >
-                    Popular
-                </button>
-                <button
-                    onClick={() => setSortKey('DateOfPosting')}
-                    className={sortKey == 'DateOfPosting' && 'buttonSelected'}
-                >
-                    New
-                </button>
+            <Box className="frontPageBar">
+                <NewPost />
+                <div>
+                    <button onClick={() => fetchDataAsync('objave')} className={filter == 'objave' && 'buttonSelected'}>
+                        Public
+                    </button>
+                    <button
+                        onClick={() => fetchDataAsync('objavepratitelja')}
+                        className={filter == 'objavepratitelja' && 'buttonSelected'}
+                        style={{ marginLeft: '0.5em' }}
+                    >
+                        Following
+                    </button>
+                    <div className="divider" />
+                    <button onClick={() => setSortKey('Rating')} className={sortKey == 'Rating' && 'buttonSelected'}>
+                        Popular
+                    </button>
+                    <button
+                        style={{ marginLeft: '0.5em' }}
+                        onClick={() => setSortKey('DateOfPosting')}
+                        className={sortKey == 'DateOfPosting' && 'buttonSelected'}
+                    >
+                        New
+                    </button>
+                </div>
             </Box>
-            {posts.map((objava, i) => {
-                return <Post key={i} post={objava} />;
+            <Box className="filterSortBar"></Box>
+            {posts.map((objava) => {
+                return <Post key={objava.PostID} post={objava} />;
             })}
         </>
     );

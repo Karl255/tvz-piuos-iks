@@ -22,7 +22,6 @@ export function Navigation() {
                     to={{ pathname: '/' }}
                     className={'link ' + (page == '/' && 'activePage')}
                 >
-                    {/* <HomeIcon sx={{ transform: 'scale(0.95))' }} className="icon" /> iks */}
                     <img src="/logo-white.svg" alt="Iks logo" width="64" height="64" />
                 </Link>
                 <Link
