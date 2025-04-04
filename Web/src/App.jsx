@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router';
-import { Navigation } from './pages/Navigation/Navigation';
+import { Login } from './pages/Auth/Login';
 import { ObjaveContextProvider } from './contexts/ObjaveContextProvider';
 
 import { Container } from '@mui/material';
@@ -11,7 +11,7 @@ function App() {
             <ObjaveContextProvider>
                 <BrowserRouter>
                     <Container maxWidth="md">
-                        <Navigation />
+                        <Login />
                     </Container>
                 </BrowserRouter>
             </ObjaveContextProvider>

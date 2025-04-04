@@ -3,9 +3,9 @@ import { Container } from '@mui/material';
 import { useState } from 'react';
 import { Link, Route, Routes } from 'react-router';
 
-import { Home } from '../FrontPage/Home';
-import { Inbox } from '../Inbox/Inbox';
-import { Profile } from '../Profile/Profile';
+import { FrontPage } from '../../pages/FrontPage/FrontPage';
+import { Inbox } from '../../pages/Inbox/Inbox';
+import { ProfilePage } from '../../pages/Profile/ProfilePage';
 
 import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -22,7 +22,6 @@ export function Navigation() {
                     to={{ pathname: '/' }}
                     className={'link ' + (page == '/' && 'activePage')}
                 >
-                    {/* <HomeIcon sx={{ transform: 'scale(0.95))' }} className="icon" /> iks */}
                     <img src="/logo-white.svg" alt="Iks logo" width="64" height="64" />
                 </Link>
                 <Link
@@ -42,9 +41,9 @@ export function Navigation() {
                 </Link>
             </nav>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<FrontPage />} />
                 <Route path="/inbox" element={<Inbox />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<ProfilePage />} />
             </Routes>
         </Container>
     );
