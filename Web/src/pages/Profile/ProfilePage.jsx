@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserInfo } from './UserInfo';
 
-import './Profile.css';
+import './profile.css';
 import { Post } from '../../components/Post/Post';
 
 export function ProfilePage() {
@@ -20,16 +20,13 @@ export function ProfilePage() {
             let res = await response.json();
             setter(res);
         } catch (error) {
-            console.error('Error:', error);
+            console.error(error);
         }
     }
 
     useEffect(() => {
-        const fetchDataAsync = async () => {
-            await fetchData('profile', setUser);
-            await fetchData('profileposts', setPosts);
-        };
-        fetchDataAsync();
+        void fetchData('profile', setUser);
+        void fetchData('profileposts', setPosts);
     }, []);
 
     return (

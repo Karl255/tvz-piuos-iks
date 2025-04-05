@@ -26,6 +26,8 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    scrollbar-gutter: stable;
 }
 
 body {
@@ -41,7 +43,6 @@ button {
     border-radius: var(--border-radius);
     background-color: transparent;
     color: var(--text-darker);
-    border: 2px solid var(--background-darker);
     border: 1.5px solid var(--text-darker);
     font-size: 0.9em;
     padding: var(--button-padding);

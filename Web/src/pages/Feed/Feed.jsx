@@ -4,10 +4,10 @@ import { useContext } from 'react';
 import { Box } from '@mui/material';
 import { ObjaveContext } from '../../contexts/ObjaveContext';
 import { Post } from '../../components/Post/Post';
-import './FrontPage.css';
+import './feed.css';
 import { NewPost } from '../../components/NewPost/NewPost';
 
-export function FrontPage() {
+export function Feed() {
     const { objave } = useContext(ObjaveContext);
     const [posts, setPosts] = useState(objave);
     const [sortKey, setSortKey] = useState('Rating');
@@ -22,7 +22,7 @@ export function FrontPage() {
 
     async function fetchData(route) {
         try {
-            let response = await fetch(`http://localhost:8080/api/${route}`, {
+            const response = await fetch(`http://localhost:8080/api/${route}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,10 +30,10 @@ export function FrontPage() {
                 body: JSON.stringify({ idKorisnik: 5 }),
             });
 
-            let res = await response.json();
+            const res = await response.json();
             setPosts(res);
         } catch (error) {
-            console.error('Error:', error);
+            console.error(error);
         }
     }
     const fetchDataAsync = async (route) => {
@@ -49,24 +49,27 @@ export function FrontPage() {
             <Box className="frontPageBar">
                 <NewPost />
                 <div>
-                    <button onClick={() => fetchDataAsync('objave')} className={filter == 'objave' && 'buttonSelected'}>
+                    <button
+                        onClick={() => fetchDataAsync('objave')}
+                        className={filter === 'objave' && 'buttonSelected'}
+                    >
                         Public
                     </button>
                     <button
                         onClick={() => fetchDataAsync('objavepratitelja')}
-                        className={filter == 'objavepratitelja' && 'buttonSelected'}
+                        className={filter === 'objavepratitelja' && 'buttonSelected'}
                         style={{ marginLeft: '0.5em' }}
                     >
                         Following
                     </button>
                     <div className="divider" />
-                    <button onClick={() => setSortKey('Rating')} className={sortKey == 'Rating' && 'buttonSelected'}>
+                    <button onClick={() => setSortKey('Rating')} className={sortKey === 'Rating' && 'buttonSelected'}>
                         Popular
                     </button>
                     <button
                         style={{ marginLeft: '0.5em' }}
                         onClick={() => setSortKey('DateOfPosting')}
-                        className={sortKey == 'DateOfPosting' && 'buttonSelected'}
+                        className={sortKey === 'DateOfPosting' && 'buttonSelected'}
                     >
                         New
                     </button>

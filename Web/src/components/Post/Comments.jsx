@@ -18,7 +18,7 @@ export function Comments({ postId, numberOfComments, incrementComments }) {
                 body: JSON.stringify(body),
             });
             let res = await response.json();
-            if (route == 'comments') {
+            if (route === 'comments') {
                 setComments(res);
                 setOpen(true);
             } else {
@@ -26,7 +26,7 @@ export function Comments({ postId, numberOfComments, incrementComments }) {
                 setOpen(false);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error(error);
         }
     }
     const fetchDataAsync = async (route, body) => {

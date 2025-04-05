@@ -19,7 +19,7 @@ export function UsersListModal({ route, title }) {
             setUsers(res);
             setOpen(true);
         } catch (error) {
-            console.error('Error:', error);
+            console.error(error);
         }
     }
     const fetchDataAsync = async () => {
