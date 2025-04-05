@@ -1,0 +1,13 @@
+.commentForm {
+    background-color: var(--background-darker);
+}
+.commentForm > * {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.commentForm input {
+    width: 100%;
+    margin-right: 1em;
+}
