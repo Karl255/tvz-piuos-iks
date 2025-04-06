@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, Box } from '@mui/material';
@@ -7,36 +7,47 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import { Comments } from './Comments';
 
 export function Post({ post }) {
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(post.likes);
     const [disliked, setDisliked] = useState(false);
-    const [dislikes, setDislikes] = useState(post.dislikes);
+    const [postRating, setPostRating] = useState(post.Rating);
+    const [numberOfComments, setNumberOfComments] = useState(post.Comments);
 
     function pressLike() {
         setLiked((prevLiked) => {
             const newLiked = !prevLiked;
-            setLikes(newLiked ? post.likes + 1 : post.likes);
+            setPostRating(newLiked ? postRating + 1 : postRating - 1);
             return newLiked;
         });
     }
     function pressDislike() {
         setDisliked((prevDisliked) => {
             const newDisliked = !prevDisliked;
-            setDislikes(newDisliked ? post.dislikes + 1 : post.dislikes);
+            setPostRating(newDisliked ? postRating - 1 : postRating + 1);
             return newDisliked;
         });
+    }
+
+    useEffect(() => {
+        setPostRating(post.Rating);
+    }, [post]);
+
+    function incrementNumberOfComments() {
+        setNumberOfComments((prev) => prev + 1);
     }
 
     return (
         <Container className="section">
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ fontWeight: 'bold', color: 'var(--primary-color)', cursor: 'default' }}>
-                    {post.username}
+                    {post.Username}
                 </div>
-                <div style={{ color: 'var(--gray)' }}> {post.datumObjave}</div>
+                <div style={{ color: 'var(--text-darker)' }}>
+                    {' '}
+                    {post.DateOfPosting && post.DateOfPosting.slice(0, 10)}
+                </div>
             </Box>
 
             <Box
@@ -47,7 +58,7 @@ export function Post({ post }) {
                     backgroundColor: 'var(--background-darker)',
                 }}
             >
-                {post.tekstObjava}
+                {post.Content}
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }} className="bottomBar">
@@ -65,8 +76,8 @@ export function Post({ post }) {
                                 <ThumbUpOffAltIcon sx={{ opacity: liked ? '0' : '100%' }} />
                             )}
                         </div>
-                        <div>{likes}</div>
                     </div>
+                    <div>{postRating}</div>
                     <div>
                         <div className="postIcon transition" onClick={pressDislike}>
                             {disliked ? (
@@ -75,13 +86,14 @@ export function Post({ post }) {
                                 <ThumbDownOffAltIcon />
                             )}
                         </div>
-                        <div>{dislikes}</div>
                     </div>
                 </Box>
                 <Box>
-                    <div>
-                        <ChatBubbleOutlineIcon className="postIcon transition" /> <span>{post.comments}</span>
-                    </div>
+                    <Comments
+                        numberOfComments={numberOfComments}
+                        postId={post.PostID}
+                        incrementComments={incrementNumberOfComments}
+                    />
                 </Box>
             </Box>
         </Container>
