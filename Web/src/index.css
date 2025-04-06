@@ -26,6 +26,8 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    scrollbar-gutter: stable;
 }
 
 body {
@@ -35,6 +37,29 @@ body {
 h3 {
     color: var(--primary-color);
     margin: 0 0 0.5em 0;
+}
+
+button {
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--text-darker);
+    border: 1.5px solid var(--text-darker);
+    font-size: 0.9em;
+    padding: var(--button-padding);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    transition: var(--transition);
+}
+button:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+button:active {
+    color: var(--text-darker);
+    border-color: var(--text-darker);
+    transform: scale(0.95);
 }
 
 .transition {
@@ -48,4 +73,40 @@ h3 {
     border-radius: var(--border-radius);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+}
+
+.modal {
+    margin: auto;
+    overflow-y: auto;
+    max-height: 20em;
+    min-width: 20em;
+    max-width: 30em;
+    margin-top: 10%;
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    border: 3px solid var(--background-darker);
+    /* box-shadow: var(--box-shadow); */
+}
+
+.divider {
+    border: 0.1px solid var(--text-darker);
+    margin: 0.2em 0.5em;
+    border-radius: var(--border-radius);
+}
+
+input {
+    border-radius: var(--border-radius);
+    background-color: var(--background);
+    border: 1px solid var(--background);
+    padding: 0 0.5em;
+    color: var(--text);
+    outline: none;
+    transition: var(--transition);
+}
+input:focus {
+    border-color: var(--primary-color);
+    transition: var(--transition);
+}
+input::placeholder {
+    color: var(--text-darker);
 }
