@@ -10,15 +10,15 @@ module.exports = function(express, pool, jwt, secret) {
 
 
     authRouter.route('/register').post(async function (req, res) {
-        if (res.body.Password != undefined){
+        if (req.body.Password != undefined){
           req.body.Password = await bcrypt.hash(req.body.Password,10);
         }
-        else if ((res.body.password != undefined)) {
+        else if ((req.body.password != undefined)) {
           req.body.password = await bcrypt.hash(req.body.password,10);
         }
         
         try {
-          let rows = await pool.query('call RegisterUser(?)', [req.body], function(error, results, fields) {
+          let rows = await pool.query('call RegisterUser(?)', [Object.values(req.body)], function(error, results, fields) {
             res.status(200).json({message: "Status code of 200!"});
           });
         } catch(e){
