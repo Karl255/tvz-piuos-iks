@@ -1,20 +1,21 @@
 import React, { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router';
-import { Login } from './pages/Auth/Login';
-import { ObjaveContextProvider } from './contexts/ObjaveContextProvider';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Container } from '@mui/material';
+import { Auth } from './pages/Auth/Auth';
+
+const queryClient = new QueryClient();
 
 function App() {
     return (
         <StrictMode>
-            <ObjaveContextProvider>
+            <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Container maxWidth="md">
-                        <Login />
+                        <Auth />
                     </Container>
                 </BrowserRouter>
-            </ObjaveContextProvider>
+            </QueryClientProvider>
         </StrictMode>
     );
 }

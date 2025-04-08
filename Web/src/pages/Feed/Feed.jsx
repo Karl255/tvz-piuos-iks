@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as R from 'ramda';
-import { useContext } from 'react';
 import { Box } from '@mui/material';
-import { ObjaveContext } from '../../contexts/ObjaveContext';
 import { Post } from '../../components/Post/Post';
 import './feed.css';
 import { NewPost } from '../../components/NewPost/NewPost';
+import { AuthContext } from '../Auth/Auth';
 
 export function Feed() {
-    const { objave } = useContext(ObjaveContext);
-    const [posts, setPosts] = useState(objave);
+    const [posts, setPosts] = useState([]);
     const [sortKey, setSortKey] = useState('Rating');
     const [filter, setFilter] = useState('objave');
+
+    const user = useContext(AuthContext);
 
     function sortPosts() {
         setPosts(R.sort(R.descend(R.prop(sortKey)), posts));
@@ -27,7 +27,7 @@ export function Feed() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idKorisnik: 5 }),
+                body: JSON.stringify({ idKorisnik: user.id }),
             });
 
             const res = await response.json();

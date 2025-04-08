@@ -47,7 +47,6 @@ button {
     font-size: 0.9em;
     padding: var(--button-padding);
     cursor: pointer;
-    display: flex;
     align-items: center;
 
     transition: var(--transition);
@@ -77,15 +76,10 @@ button:active {
 
 .modal {
     margin: auto;
-    overflow-y: auto;
-    max-height: 20em;
-    min-width: 20em;
-    max-width: 30em;
     margin-top: 10%;
     background-color: var(--background);
     border-radius: var(--border-radius);
     border: 3px solid var(--background-darker);
-    /* box-shadow: var(--box-shadow); */
 }
 
 .divider {
@@ -97,7 +91,7 @@ button:active {
 input {
     border-radius: var(--border-radius);
     background-color: var(--background);
-    border: 1px solid var(--background);
+    border: 1px solid var(--background-darker);
     padding: 0 0.5em;
     color: var(--text);
     outline: none;
@@ -109,4 +103,27 @@ input:focus {
 }
 input::placeholder {
     color: var(--text-darker);
+}
+
+input[type='date']::-webkit-datetime-edit {
+    color: var(--text);
+}
+input[type='date']::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+label {
+    color: var(--text-darker);
+    font-weight: bold;
+}
+
+.greenButton {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--background);
+    font-weight: bold;
+}
+.greenButton:hover {
+    background-color: var(--background);
 }

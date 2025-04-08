@@ -1,0 +1,32 @@
+.auth {
+    max-width: 20em;
+    padding: 2em;
+    margin: 2em auto;
+}
+
+.auth input {
+    background-color: var(--background-darker);
+    padding: var(--button-padding);
+    margin-top: 0.5em;
+}
+.auth form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.auth form > div {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.auth button {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}

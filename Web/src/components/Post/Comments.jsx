@@ -47,7 +47,7 @@ export function Comments({ postId, numberOfComments, incrementComments }) {
                 <div>{numberOfComments}</div>
             </div>
             <Modal open={open} onClose={() => setOpen(false)}>
-                <div className="modal">
+                <div className="modal comments">
                     {comments.map((comment, index) => (
                         <div key={index}>
                             <div style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>{comment.Username}</div>
