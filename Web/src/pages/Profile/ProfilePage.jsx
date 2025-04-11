@@ -1,44 +1,55 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import { UserInfo } from './UserInfo';
 
 import './profile.css';
 import { Post } from '../../components/Post/Post';
-import { AuthContext } from '../Auth/Auth';
+import { useParams } from 'react-router';
+import { useQueries } from '@tanstack/react-query';
+import { getProfile } from './ProfileDataService';
+import { LoadingPage } from '../../components/LoadingPage';
 
 export function ProfilePage() {
-    const [user, setUser] = useState({});
-    const [posts, setPosts] = useState([]);
+    const params = useParams();
 
-    const { id } = useContext(AuthContext);
-
-    async function fetchData(route, setter) {
-        try {
-            let response = await fetch(`http://localhost:8080/api/${route}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ idKorisnik: id }),
-            });
-
-            let res = await response.json();
-            setter(res);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    useEffect(() => {
-        void fetchData('profile', setUser);
-        void fetchData('profileposts', setPosts);
-    }, []);
+    const queries = useQueries({
+        queries: [
+            {
+                queryKey: ['profile'],
+                queryFn: () => getProfile({ route: 'profile', id: params.id }),
+            },
+            {
+                queryKey: ['followers'],
+                queryFn: () => getProfile({ route: 'followers', id: params.id }),
+            },
+            {
+                queryKey: ['followed'],
+                queryFn: () => getProfile({ route: 'followed', id: params.id }),
+            },
+            {
+                queryKey: ['profilePosts'],
+                queryFn: () => getProfile({ route: 'profileposts', id: params.id }),
+            },
+        ],
+        combine: (results) => {
+            return {
+                data: results.map((result) => result.data),
+                pending: results.some((result) => result.isPending),
+            };
+        },
+    });
 
     return (
         <>
-            <UserInfo user={user} />
-            {posts.map((post, i) => {
-                return <Post key={i} post={post} />;
-            })}
+            {queries.pending ? (
+                <LoadingPage />
+            ) : (
+                <>
+                    <UserInfo user={queries.data[0]} followers={queries.data[1]} following={queries.data[2]} />
+                    {queries.data[3].map((post, i) => {
+                        return <Post key={i} post={post} />;
+                    })}
+                </>
+            )}
         </>
     );
 }

@@ -18,8 +18,6 @@
     --button-padding: 0.5em 0.7em;
 
     --transition: 0.33s;
-
-    background-color: var(--background);
     color: var(--text);
 
     font-synthesis: none;
@@ -28,9 +26,21 @@
     -moz-osx-font-smoothing: grayscale;
 
     scrollbar-gutter: stable;
+
+    user-select: none;
+}
+
+::selection {
+    background-color: var(--primary-color);
 }
 
 body {
+    background: #242428;
+    background: conic-gradient(from 45deg, #242428, #303036);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
     margin: 0;
 }
 
@@ -68,10 +78,12 @@ button:active {
 .section {
     padding: 1em;
     margin: 1em 0;
-    border: 3px solid var(--background-darker);
-    border-radius: var(--border-radius);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(13px);
+    backdrop-filter: blur(13px);
 }
 
 .modal {
@@ -88,16 +100,22 @@ button:active {
     border-radius: var(--border-radius);
 }
 
-input {
+input,
+textarea {
     border-radius: var(--border-radius);
-    background-color: var(--background);
+    background-color: var(--background-darker);
     border: 1px solid var(--background-darker);
     padding: 0 0.5em;
     color: var(--text);
     outline: none;
-    transition: var(--transition);
+    transition: var(--transition) !important;
 }
-input:focus {
+textarea {
+    resize: none;
+    height: 5em;
+}
+input:focus,
+textarea:focus {
     border-color: var(--primary-color);
     transition: var(--transition);
 }
@@ -113,6 +131,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
     color: var(--primary-color);
 }
 
+.invalid {
+    border-color: var(--secondary-color);
+}
+
 label {
     color: var(--text-darker);
     font-weight: bold;
@@ -125,5 +147,52 @@ label {
     font-weight: bold;
 }
 .greenButton:hover {
+    background-color: transparent;
+}
+
+/*Input switch*/
+.switch {
+    margin-top: 0.5em;
+    position: relative;
+    display: inline-block;
+    width: 2.625em; /* adjusted width */
+    height: 1.5em; /* your target height */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background-darker);
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 1.125em; /* knob height */
+    width: 1.125em; /* knob width */
+    left: 0.1875em; /* padding inside the track */
+    bottom: 0.1875em;
     background-color: var(--background);
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(1.125em); /* knob slides the full width minus knob size and padding */
 }

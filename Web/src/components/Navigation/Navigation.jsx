@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container } from '@mui/material';
 import { useState } from 'react';
 import { Link, Route, Routes } from 'react-router';
@@ -11,9 +11,11 @@ import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import './navigation.css';
+import { AuthContext } from '../../pages/Auth/Auth';
 
 export function Navigation() {
     const [page, setPage] = useState('/');
+    const user = useContext(AuthContext);
     return (
         <Container>
             <nav>
@@ -32,7 +34,7 @@ export function Navigation() {
                     <ChatIcon sx={{ transform: 'scale(0.9) translateY(3px)' }} className="icon" /> Inbox
                 </Link>
                 <Link
-                    to={{ pathname: '/profile' }}
+                    to={{ pathname: `/profile/${user.id}` }}
                     onClick={() => setPage('/profile')}
                     className={'link ' + (page === '/profile' && 'activePage')}
                 >
@@ -43,7 +45,7 @@ export function Navigation() {
             <Routes>
                 <Route path="/" element={<Feed />} />
                 <Route path="/inbox" element={<Inbox />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/:id" element={<ProfilePage />} />
             </Routes>
         </Container>
     );

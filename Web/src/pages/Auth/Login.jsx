@@ -4,18 +4,16 @@ import PropTypes from 'prop-types';
 import { login } from './AuthDataService';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingPage } from '../../components/LoadingPage';
+import { ErrorMessage } from '../../components/ErrorMessage';
 
 export function Login({ setUser, setLoggedIn }) {
-    const { register, handleSubmit } = useForm();
+    const { formState, register, handleSubmit } = useForm();
 
-    const { isPending, mutate } = useMutation({
+    const { isError, isPending, mutate } = useMutation({
         mutationFn: login,
         onSuccess: (res) => {
             setUser(res.user);
             setLoggedIn(true);
-        },
-        onError: () => {
-            alert('Error');
         },
     });
 
@@ -33,16 +31,29 @@ export function Login({ setUser, setLoggedIn }) {
                         <h1>Log In</h1>
                         <div>
                             <label htmlFor="username">Username</label>
-                            <input type="text" name="username" required {...register('Username')} />
+                            <input
+                                type="text"
+                                {...register('username', {
+                                    required: true,
+                                    minLength: 5,
+                                    maxLength: 20,
+                                })}
+                                className={formState.errors.username && 'invalid'}
+                            />
                         </div>
                         <div>
                             <label htmlFor="password">Password</label>
-                            <input type="password" name="password" required {...register('Password')} />
+                            <input
+                                type="password"
+                                {...register('password', { required: true, minLength: 8, maxLength: 20 })}
+                                className={formState.errors.password && 'invalid'}
+                            />
                         </div>
                         <button type="submit" className="greenButton">
                             Log in
                         </button>
                     </form>
+                    {isError && <ErrorMessage>Wrong Username or Password!</ErrorMessage>}
                 </div>
             )}
         </>

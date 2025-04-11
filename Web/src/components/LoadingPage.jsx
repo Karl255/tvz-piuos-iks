@@ -13,6 +13,7 @@ export function LoadingPage() {
         justifyContent: 'center',
         alignItems: 'center',
     };
+
     const loadingIconStyle = {
         color: 'var(--primary-color)',
         animation: 'spin 1s ease infinite',

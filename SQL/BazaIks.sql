@@ -51,7 +51,7 @@ CREATE TABLE `comment` (
   KEY `fk_Komentar_Objava1_idx` (`idPost`),
   CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Komentar_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `follower` (
   KEY `fk_Pratitelji_Korisnik2_idx` (`idFollowed`),
   CONSTRAINT `fk_Pratitelji_Korisnik1` FOREIGN KEY (`idFollower`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Pratitelji_Korisnik2` FOREIGN KEY (`idFollowed`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   KEY `fk_Objava_Korisnik_idx` (`idUser`),
   CONSTRAINT `fk_Objava_Korisnik` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +147,7 @@ CREATE TABLE `user` (
   `DateOfBirth` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +307,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfile`(idUser_ INT)
 BEGIN
-    SELECT u.Username, u.Name, u.Surname, u.DateOfBirth, (SELECT count(*) FROM follower f
+    SELECT u.id, u.Username, u.Name, u.Surname, u.DateOfBirth, (SELECT count(*) FROM follower f
     WHERE f.idFollower=idUser_) as Following, 
     (SELECT count(*) FROM follower f
     WHERE f.idFollowed=idUser_) as Followers FROM user u WHERE u.id = idUser_;
@@ -393,7 +393,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser`(username_ VARCHAR(45), password_ TEXT, name_ VARCHAR(45), surname_ VARCHAR(45), dateofbirth_ DATE)
 BEGIN
-	INSERT INTO USER (Username, PASSWORD, NAME, Surname, DateOfBirth) VALUES 
+	INSERT INTO USER (Username, PASSWORD, NAME, surname, DateOfBirth) VALUES 
 	(username_, password_, name_, surname_, dateofbirth_);
 END ;;
 DELIMITER ;
@@ -411,4 +411,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-31 14:48:49
+-- Dump completed on 2025-04-11 19:49:43

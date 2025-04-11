@@ -4,7 +4,8 @@
     margin: 2em auto;
 }
 
-.auth input {
+.auth input,
+.auth textarea {
     background-color: var(--background-darker);
     padding: var(--button-padding);
     margin-top: 0.5em;

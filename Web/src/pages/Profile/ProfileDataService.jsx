@@ -1,10 +1,10 @@
-export async function registerUser(data) {
-    const response = await fetch(`http://localhost:8080/api/auth/register`, {
+export async function getProfile({ route, id }) {
+    const response = await fetch(`http://localhost:8080/api/${route}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ idKorisnik: id }),
     });
     const res = await response.json();
     if (!response.ok) {
@@ -13,13 +13,13 @@ export async function registerUser(data) {
     return res;
 }
 
-export async function login(data) {
-    const response = await fetch(`http://localhost:8080/api/auth/login`, {
+export async function follow({ idUser, idFollow }) {
+    const response = await fetch(`http://localhost:8080/api/follow`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ idKorisnik: idUser, idZapratiti: idFollow }),
     });
     const res = await response.json();
     if (!response.ok) {

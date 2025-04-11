@@ -8,6 +8,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Comments } from './Comments';
+import { Link } from 'react-router';
 
 export function Post({ post }) {
     const [liked, setLiked] = useState(false);
@@ -41,9 +42,9 @@ export function Post({ post }) {
     return (
         <Container className="section">
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ fontWeight: 'bold', color: 'var(--primary-color)', cursor: 'default' }}>
+                <Link to={`/profile/${post.UserID}`} className="postLink">
                     {post.Username}
-                </div>
+                </Link>
                 <div style={{ color: 'var(--text-darker)' }}>
                     {' '}
                     {post.DateOfPosting && post.DateOfPosting.slice(0, 10)}

@@ -4,15 +4,18 @@ import { useForm } from 'react-hook-form';
 import { registerUser } from './AuthDataService';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingPage } from '../../components/LoadingPage';
+import { ErrorMessage } from '../../components/ErrorMessage';
 
 export function Register() {
     const [open, setOpen] = useState(false);
-    const { register, handleSubmit } = useForm();
+    const { reset, formState, register, handleSubmit } = useForm();
 
-    const { isPending, mutate } = useMutation({
+    const { isError, isPending, mutate } = useMutation({
         mutationFn: registerUser,
-        onSuccess: () => setOpen(false),
-        onError: () => alert('Error'),
+        onSuccess: () => {
+            reset();
+            setOpen(false);
+        },
     });
 
     async function onSubmit(data) {
@@ -32,27 +35,53 @@ export function Register() {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <h1>Registration</h1>
                                 <div>
-                                    <label htmlFor="username">Username</label>
-                                    <input type="text" name="username" {...register('Username')} />
+                                    <label htmlFor="Username">Username</label>
+                                    <input
+                                        type="text"
+                                        {...register('Username', { required: true, minLength: 4, maxLength: 20 })}
+                                        className={formState.errors.Username && 'invalid'}
+                                    />
                                 </div>
                                 <div>
-                                    <label htmlFor="password">Password</label>
-                                    <input type="password" name="password" {...register('Password')} />
+                                    <label htmlFor="Password">Password</label>
+                                    <input
+                                        type="password"
+                                        {...register('Password', { required: true, minLength: 8, maxLength: 20 })}
+                                        className={formState.errors.Password && 'invalid'}
+                                    />
                                 </div>
                                 <div>
-                                    <label htmlFor="name">Name</label>
-                                    <input type="text" name="name" {...register('Name')} />
+                                    <label htmlFor="Name">Name</label>
+                                    <input
+                                        type="text"
+                                        {...register('Name', { required: true, minLength: 2, maxLength: 25 })}
+                                        className={formState.errors.Name && 'invalid'}
+                                    />
                                 </div>
                                 <div>
-                                    <label htmlFor="surname">Surname</label>
-                                    <input type="text" name="surname" {...register('Surname')} />
+                                    <label htmlFor="Surname">Surname</label>
+                                    <input
+                                        type="text"
+                                        {...register('Surname', { required: true, minLength: 2, maxLength: 25 })}
+                                        className={formState.errors.Surname && 'invalid'}
+                                    />
                                 </div>
                                 <div>
-                                    <label htmlFor="dateOfBirth">Date of Birth</label>
-                                    <input type="date" max={new Date()} {...register('DateOfBirth')} />
+                                    <label htmlFor="DateOfBirth">Date of Birth</label>
+                                    <input
+                                        type="date"
+                                        {...register('DateOfBirth', {
+                                            required: true,
+                                            max: new Date().toISOString().split('T')[0],
+                                        })}
+                                        className={formState.errors.DateOfBirth && 'invalid'}
+                                    />
                                 </div>
-                                <button type="submit">Submit</button>
+                                <button type="submit" className="greenButton">
+                                    Submit
+                                </button>
                             </form>
+                            {isError && <ErrorMessage>User already exists</ErrorMessage>}
                         </div>
                     </Modal>
                 </>

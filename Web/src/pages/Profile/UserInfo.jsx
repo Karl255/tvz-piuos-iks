@@ -1,18 +1,43 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { UsersListModal } from './UsersListModal';
+import { AuthContext } from '../Auth/Auth';
+import { useMutation } from '@tanstack/react-query';
+import { follow } from './ProfileDataService';
 
-export function UserInfo({ user }) {
+export function UserInfo({ user, followers, following }) {
+    const { id } = useContext(AuthContext);
+    const [followingStatus, setFollowingStatus] = useState(false);
+
+    console.log(id, user);
+
+    if (id !== user.id) {
+        if (following.find((element) => element.id === user.id)) setFollowingStatus(true);
+    }
+
+    const { mutate: setFollow } = useMutation({
+        mutationFn: follow,
+        onSuccess: () => setFollowingStatus(true),
+    });
+
+    function useSetFollow() {
+        if (!followingStatus) setFollow({ idUser: id, idFollow: user.id });
+    }
+
     return (
         <Container className="profile section">
-            <h2>
-                {user.Username} <EditIcon sx={{ cursor: 'pointer' }} />
-            </h2>
+            <div className="profileHeader">
+                <h1>
+                    {user.Username} {id === user.id && <EditIcon sx={{ cursor: 'pointer' }} />}
+                </h1>
+                {id !== user.id && <button onClick={useSetFollow}>{followingStatus ? 'Unfollow' : 'Follow'}</button>}
+            </div>
+
             <div className="followersBar">
-                <UsersListModal title={user.Followers + ' followers'} route={'followers'} />
-                <UsersListModal title={user.Following + ' following'} route={'followed'} />
+                <UsersListModal title={user.Followers + ' followers'} list={followers} />
+                <UsersListModal title={user.Following + ' following'} list={following} />
             </div>
 
             <div className="userInfo">
@@ -31,4 +56,6 @@ export function UserInfo({ user }) {
 
 UserInfo.propTypes = {
     user: PropTypes.object,
+    followers: PropTypes.array,
+    following: PropTypes.array,
 };

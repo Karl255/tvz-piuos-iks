@@ -18,3 +18,13 @@
     min-width: 20em;
     max-width: 30em;
 }
+
+.postLink {
+    color: var(--primary-color);
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+.postLink:hover {
+    text-decoration: underline;
+}
