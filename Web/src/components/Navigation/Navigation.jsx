@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { Container } from '@mui/material';
-import { useState } from 'react';
-import { Link, Route, Routes } from 'react-router';
+import { Link, Route, Routes, useLocation } from 'react-router';
 
 import { Feed } from '../../pages/Feed/Feed';
 import { Inbox } from '../../pages/Inbox/Inbox';
@@ -14,36 +13,30 @@ import './navigation.css';
 import { AuthContext } from '../../pages/Auth/Auth';
 
 export function Navigation() {
-    const [page, setPage] = useState('/');
     const user = useContext(AuthContext);
+    console.log(user);
+
+    const { pathname } = useLocation();
+
     return (
         <Container>
             <nav>
-                <Link
-                    onClick={() => setPage('/')}
-                    to={{ pathname: '/' }}
-                    className={'link ' + (page === '/' && 'activePage')}
-                >
+                <Link to={{ pathname: '/feed' }} className={'link ' + (pathname.match('/feed') && 'activePage')}>
                     <img src="/logo-white.svg" alt="Iks logo" width="64" height="64" />
                 </Link>
-                <Link
-                    onClick={() => setPage('/inbox')}
-                    to={{ pathname: '/inbox' }}
-                    className={'link ' + (page === '/inbox' && 'activePage')}
-                >
+                <Link to={{ pathname: '/inbox' }} className={'link ' + (pathname.match('/inbox') && 'activePage')}>
                     <ChatIcon sx={{ transform: 'scale(0.9) translateY(3px)' }} className="icon" /> Inbox
                 </Link>
                 <Link
                     to={{ pathname: `/profile/${user.id}` }}
-                    onClick={() => setPage('/profile')}
-                    className={'link ' + (page === '/profile' && 'activePage')}
+                    className={'link ' + (pathname.match(`/profile/${user.id}`) && 'activePage')}
                 >
                     <AccountCircleIcon className="icon" />
-                    Profile
+                    {user.Username}
                 </Link>
             </nav>
             <Routes>
-                <Route path="/" element={<Feed />} />
+                <Route path="/feed" element={<Feed />} />
                 <Route path="/inbox" element={<Inbox />} />
                 <Route path="/profile/:id" element={<ProfilePage />} />
             </Routes>

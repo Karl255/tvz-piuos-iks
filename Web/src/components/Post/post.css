@@ -10,6 +10,10 @@
 .commentForm input {
     width: 100%;
     margin-right: 1em;
+    border-color: var(--text-darker);
+}
+.commentForm input:focus {
+    border-color: var(--primary-color);
 }
 
 .comments {

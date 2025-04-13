@@ -1,47 +1,43 @@
 import { Modal } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PropTypes from 'prop-types';
 
 import './post.css';
+import { useMutation } from '@tanstack/react-query';
+import { addComment, getComments } from './PostDataService';
+import { AuthContext } from '../../pages/Auth/Auth';
 
 export function Comments({ postId, numberOfComments, incrementComments }) {
     const [open, setOpen] = useState(false);
     const [comments, setComments] = useState([]);
-    async function fetchData(route, body) {
-        try {
-            let response = await fetch(`http://localhost:8080/api/${route}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            });
-            let res = await response.json();
-            if (route === 'comments') {
-                setComments(res);
-                setOpen(true);
-            } else {
-                incrementComments();
-                setOpen(false);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    const fetchDataAsync = async (route, body) => {
-        await fetchData(route, body);
-    };
+    const { id } = useContext(AuthContext);
+
+    const { mutate: useGetComments } = useMutation({
+        mutationFn: getComments,
+        onSuccess: (res) => {
+            setComments(res);
+            setOpen(true);
+        },
+    });
+
+    const { mutate: useAddComment } = useMutation({
+        mutationFn: addComment,
+        onSucess: () => {
+            incrementComments();
+            useGetComments();
+        },
+    });
 
     function submitComment(event) {
         event.preventDefault();
-        fetchDataAsync('makecomment', { idKorisnik: 5, idPost: postId, content: event.target.newComment.value });
+        useAddComment({ idKorisnik: id, idPost: postId, content: event.target.newComment.value });
     }
     return (
         <>
             <div>
                 <ChatBubbleOutlineIcon
-                    onClick={() => fetchDataAsync('comments', { idObjava: postId })}
+                    onClick={() => useGetComments({ idObjava: postId })}
                     className="postIcon transition"
                 />{' '}
                 <div>{numberOfComments}</div>

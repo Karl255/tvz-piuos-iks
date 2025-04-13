@@ -14,19 +14,19 @@ export function ProfilePage() {
     const queries = useQueries({
         queries: [
             {
-                queryKey: ['profile'],
+                queryKey: ['profile', params.id],
                 queryFn: () => getProfile({ route: 'profile', id: params.id }),
             },
             {
-                queryKey: ['followers'],
+                queryKey: ['followers', params.id],
                 queryFn: () => getProfile({ route: 'followers', id: params.id }),
             },
             {
-                queryKey: ['followed'],
+                queryKey: ['followed', params.id],
                 queryFn: () => getProfile({ route: 'followed', id: params.id }),
             },
             {
-                queryKey: ['profilePosts'],
+                queryKey: ['profilePosts', params.id],
                 queryFn: () => getProfile({ route: 'profileposts', id: params.id }),
             },
         ],

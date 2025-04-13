@@ -1,5 +1,15 @@
+import { callApi } from '../../DataService';
+
 export async function addPost(data) {
-    const response = await fetch(`http://localhost:8080/api/makepost`, {
+    return callApi({ method: 'POST', route: 'makepost', data });
+}
+
+export async function getComments(data) {
+    return callApi({ method: 'POST', route: 'comments', data });
+}
+
+export async function addComment(data) {
+    const response = await fetch(`http://localhost:8080/api/makecomment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

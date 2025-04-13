@@ -22,8 +22,8 @@ nav {
 
 .link:hover {
     cursor: pointer;
-    color: var(--primary-color);
-
+    /* color: var(--primary-color); */
+    border-bottom-color: var(--primary-color-trans);
     transition: var(--transition);
 }
 

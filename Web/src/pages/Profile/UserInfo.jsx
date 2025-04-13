@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -6,21 +6,23 @@ import { UsersListModal } from './UsersListModal';
 import { AuthContext } from '../Auth/Auth';
 import { useMutation } from '@tanstack/react-query';
 import { follow } from './ProfileDataService';
+import { useParams } from 'react-router';
 
 export function UserInfo({ user, followers, following }) {
     const { id } = useContext(AuthContext);
+    const params = useParams();
     const [followingStatus, setFollowingStatus] = useState(false);
-
-    console.log(id, user);
-
-    if (id !== user.id) {
-        if (following.find((element) => element.id === user.id)) setFollowingStatus(true);
-    }
 
     const { mutate: setFollow } = useMutation({
         mutationFn: follow,
         onSuccess: () => setFollowingStatus(true),
     });
+
+    useEffect(() => {
+        if (id !== user.id) {
+            if (followers.find((element) => element.id === id)) setFollowingStatus(true);
+        }
+    }, [params.id]);
 
     function useSetFollow() {
         if (!followingStatus) setFollow({ idUser: id, idFollow: user.id });
@@ -32,7 +34,9 @@ export function UserInfo({ user, followers, following }) {
                 <h1>
                     {user.Username} {id === user.id && <EditIcon sx={{ cursor: 'pointer' }} />}
                 </h1>
-                {id !== user.id && <button onClick={useSetFollow}>{followingStatus ? 'Unfollow' : 'Follow'}</button>}
+                {id !== user.id && (
+                    <button onClick={() => useSetFollow()}>{followingStatus ? 'Unfollow' : 'Follow'}</button>
+                )}
             </div>
 
             <div className="followersBar">
