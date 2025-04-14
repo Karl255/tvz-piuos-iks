@@ -11,6 +11,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import './navigation.css';
 import { AuthContext } from '../../pages/Auth/Auth';
+import { Chat } from '../../pages/Inbox/Chat';
 
 export function Navigation() {
     const user = useContext(AuthContext);
@@ -38,6 +39,7 @@ export function Navigation() {
             <Routes>
                 <Route path="/feed" element={<Feed />} />
                 <Route path="/inbox" element={<Inbox />} />
+                <Route path="/chat" element={<Chat />} />
                 <Route path="/profile/:id" element={<ProfilePage />} />
             </Routes>
         </Container>

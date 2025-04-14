@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { login } from './AuthDataService';
+import { loginUser } from './AuthDataService';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingPage } from '../../components/LoadingPage';
 import { ErrorMessage } from '../../components/ErrorMessage';
@@ -10,7 +10,7 @@ export function Login({ setUser, setLoggedIn }) {
     const { formState, register, handleSubmit } = useForm();
 
     const { isError, isPending, mutate } = useMutation({
-        mutationFn: login,
+        mutationFn: loginUser,
         onSuccess: (res) => {
             setUser(res.user);
             setLoggedIn(true);

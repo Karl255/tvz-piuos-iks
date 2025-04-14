@@ -14,7 +14,6 @@ export function Post({ post }) {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [postRating, setPostRating] = useState(post.Rating);
-    const [numberOfComments, setNumberOfComments] = useState(post.Comments);
 
     function pressLike() {
         setLiked((prevLiked) => {
@@ -34,10 +33,6 @@ export function Post({ post }) {
     useEffect(() => {
         setPostRating(post.Rating);
     }, [post]);
-
-    function incrementNumberOfComments() {
-        setNumberOfComments((prev) => prev + 1);
-    }
 
     return (
         <Container className="section">
@@ -90,11 +85,7 @@ export function Post({ post }) {
                     </div>
                 </Box>
                 <Box>
-                    <Comments
-                        numberOfComments={numberOfComments}
-                        postId={post.PostID}
-                        incrementComments={incrementNumberOfComments}
-                    />
+                    <Comments initialNumberOfComments={post.Comments} postId={post.PostID} />
                 </Box>
             </Box>
         </Container>

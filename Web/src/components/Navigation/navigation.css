@@ -10,8 +10,8 @@ nav {
     text-decoration: none;
     width: 100%;
     font-size: 1.2em;
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
 
     display: flex;
     align-items: center;
@@ -22,8 +22,7 @@ nav {
 
 .link:hover {
     cursor: pointer;
-    /* color: var(--primary-color); */
-    border-bottom-color: var(--primary-color-trans);
+    border-bottom-color: var(--primary-color);
     transition: var(--transition);
 }
 

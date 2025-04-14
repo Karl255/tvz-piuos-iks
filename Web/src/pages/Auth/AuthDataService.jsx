@@ -13,7 +13,7 @@ export async function registerUser(data) {
     return res;
 }
 
-export async function login(data) {
+export async function loginUser(data) {
     const response = await fetch(`http://localhost:8080/api/auth/login`, {
         method: 'POST',
         headers: {
