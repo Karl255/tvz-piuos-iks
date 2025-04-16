@@ -351,10 +351,10 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfilePosts`(idUser_ INT)
 BEGIN
-	SELECT p.id, p.Content, p.Visibility, p.DateOfPosting, SUM(r.Value) as Rating, COUNT(kom.id) as Comments FROM post p
+	SELECT p.id, p.Content, p.Visibility, p.DateOfPosting, SUM(r.Value) as Rating, kom.Numbers as Comments FROM post p
 	LEFT OUTER JOIN user u ON u.id = p.idUser
     LEFT OUTER JOIN rating r ON r.idPost = p.id
-    LEFT OUTER JOIN comment kom ON kom.idPost = p.id
+    LEFT OUTER JOIN (SELECT c.idPost, COUNT(c.id) as Numbers FROM comment c GROUP BY c.idPost) kom ON kom.idPost = p.id
 	WHERE u.id = idUser_
     GROUP BY p.id;
 END ;;
@@ -549,4 +549,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-16 14:23:01
+-- Dump completed on 2025-04-16 16:48:57
