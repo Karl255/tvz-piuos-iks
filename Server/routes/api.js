@@ -64,6 +64,16 @@ module.exports = function(express, pool, jwt, secret) {
       }
     })
 
+    apiRouter.route('/ratings').post(async function (req,res){
+      try {
+        let rows = await pool.query('call GetRatings(?)', [req.body.idKorisnik], function (error, results, fields) {
+          res.status(200).json(results[0]);
+        })
+      } catch (e) {
+        res.status(400).json({message: 'Bad request'});
+      }
+    })
+
 
 
     apiRouter.route('/objave').post(async function (req,res){
