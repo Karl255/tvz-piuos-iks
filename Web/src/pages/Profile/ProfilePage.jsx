@@ -2,11 +2,11 @@ import React from 'react';
 import { UserInfo } from './UserInfo';
 
 import './profile.css';
-import { Post } from '../../components/Post/Post';
 import { useParams } from 'react-router';
 import { useQueries } from '@tanstack/react-query';
 import { getProfile } from './ProfileDataService';
 import { LoadingPage } from '../../components/LoadingPage';
+import { PostsList } from '../../components/Post/PostsList';
 
 export function ProfilePage() {
     const params = useParams();
@@ -25,10 +25,10 @@ export function ProfilePage() {
                 queryKey: ['followed', params.id],
                 queryFn: () => getProfile({ route: 'followed', id: params.id }),
             },
-            {
-                queryKey: ['profilePosts', params.id],
-                queryFn: () => getProfile({ route: 'profileposts', id: params.id }),
-            },
+            // {
+            //     queryKey: ['profilePosts', params.id],
+            //     queryFn: () => getProfile({ route: 'profileposts', id: params.id }),
+            // },
         ],
         combine: (results) => {
             return {
@@ -45,9 +45,7 @@ export function ProfilePage() {
             ) : (
                 <>
                     <UserInfo user={queries.data[0]} followers={queries.data[1]} following={queries.data[2]} />
-                    {queries.data[3].map((post, i) => {
-                        return <Post key={i} post={post} />;
-                    })}
+                    <PostsList route={'profilePosts'} userId={params.id} />
                 </>
             )}
         </>

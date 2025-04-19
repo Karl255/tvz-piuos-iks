@@ -5,6 +5,7 @@ import { registerUser } from './AuthDataService';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingPage } from '../../components/LoadingPage';
 import { ErrorMessage } from '../../components/ErrorMessage';
+import { Tooltip } from '../../components/Tooltip/Tooltip';
 
 export function Register() {
     const [open, setOpen] = useState(false);
@@ -35,15 +36,23 @@ export function Register() {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <h1>Registration</h1>
                                 <div>
-                                    <label htmlFor="Username">Username</label>
+                                    <div className="label">
+                                        <label htmlFor="Username">Username</label>
+                                        <Tooltip>Required between 5 - 20 characters</Tooltip>
+                                    </div>
+
                                     <input
                                         type="text"
-                                        {...register('Username', { required: true, minLength: 4, maxLength: 20 })}
+                                        {...register('Username', { required: true, minLength: 5, maxLength: 20 })}
                                         className={formState.errors.Username && 'invalid'}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="Password">Password</label>
+                                    <div className="label">
+                                        <label htmlFor="Password">Password</label>
+                                        <Tooltip>Required between 8 - 20 characters</Tooltip>
+                                    </div>
+
                                     <input
                                         type="password"
                                         {...register('Password', { required: true, minLength: 8, maxLength: 20 })}
@@ -51,7 +60,11 @@ export function Register() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="Name">Name</label>
+                                    <div className="label">
+                                        <label htmlFor="Name">Name</label>
+                                        <Tooltip>Required between 2 - 25 characters</Tooltip>
+                                    </div>
+
                                     <input
                                         type="text"
                                         {...register('Name', { required: true, minLength: 2, maxLength: 25 })}
@@ -59,7 +72,11 @@ export function Register() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="Surname">Surname</label>
+                                    <div className="label">
+                                        <label htmlFor="Surname">Surname</label>
+                                        <Tooltip>Required between 2 - 25 characters</Tooltip>
+                                    </div>
+
                                     <input
                                         type="text"
                                         {...register('Surname', { required: true, minLength: 2, maxLength: 25 })}
@@ -80,8 +97,8 @@ export function Register() {
                                 <button type="submit" className="greenButton">
                                     Submit
                                 </button>
+                                {isError && <ErrorMessage>User already exists</ErrorMessage>}
                             </form>
-                            {isError && <ErrorMessage>User already exists</ErrorMessage>}
                         </div>
                     </Modal>
                 </>

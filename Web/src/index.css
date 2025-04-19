@@ -5,12 +5,13 @@
     font-weight: 400;
 
     --primary-color: #50c78f;
-    --primary-color-trans: #50c78f52;
+    --primary-color-trans: #50c78f25;
     --secondary-color: #b1374c;
     --background: #303036;
     --background-darker: #242428;
     --text: #f4f4f5;
     --text-darker: #9f9fa8;
+    --text-darker-trans: #9f9fa843;
 
     --box-shadow: 0px 5px 10px var(--background-darker);
 
@@ -147,8 +148,15 @@ label {
     color: var(--background);
     font-weight: bold;
 }
-.greenButton:hover {
-    background-color: transparent;
+.greenButtonTrans {
+    background-color: var(--primary-color-trans);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.greenButton:hover,
+.greenButtonTrans {
+    background-color: var(--primary-color-trans);
 }
 
 /*Input switch*/

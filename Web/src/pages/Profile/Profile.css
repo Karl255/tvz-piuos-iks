@@ -23,8 +23,8 @@
     color: var(--text-darker);
 }
 
-.modal > div {
-    padding: 0.5em 1em;
+.userDiv {
+    padding: var(--button-padding);
 }
 .modal > div:nth-child(odd) {
     background-color: var(--background-darker);

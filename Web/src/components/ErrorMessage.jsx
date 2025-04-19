@@ -5,6 +5,7 @@ export function ErrorMessage({ children }) {
     const errorMessage = {
         fontWeight: 'bold',
         color: 'var(--secondary-color)',
+        textAlign: 'center',
     };
     return <div style={errorMessage}>{children}</div>;
 }

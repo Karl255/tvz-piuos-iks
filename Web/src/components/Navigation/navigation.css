@@ -19,13 +19,11 @@ nav {
 
     transition: var(--transition);
 }
-
 .link:hover {
     cursor: pointer;
     border-bottom-color: var(--primary-color);
     transition: var(--transition);
 }
-
 .icon {
     font-size: 0.8em;
     margin-right: 0.5em;

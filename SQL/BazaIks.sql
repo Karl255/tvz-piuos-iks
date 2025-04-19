@@ -51,7 +51,7 @@ CREATE TABLE `comment` (
   KEY `fk_Komentar_Objava1_idx` (`idPost`),
   CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Komentar_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,6 +172,28 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetChat` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetChat`(idParticipant1_ INT)
+BEGIN
+	SELECT ch.id as idChat, ch.idParticipant1, ch.idParticipant2, u2.Username, m.Time_, m.Content FROM chat ch
+    LEFT OUTER JOIN user u ON u.id = ch.idParticipant2
+    LEFT OUTER JOIN (SELECT id, idChat, MAX(TimeOfMessage) as Time_, Content FROM message GROUP BY idChat) m ON m.idChat = ch.id
+    WHERE idParticipant1 = idParticipant1_;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetComments` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -251,9 +273,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPost`(idUser_ INT)
 BEGIN
-	SELECT u.id as UserID, u.username as Username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
+	SELECT u.id as UserID, u.username as Username, p.id as PostID, p.Content, p.DateOfPosting, kom.Numbers AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
-	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
+	LEFT OUTER JOIN (SELECT c.idPost, COUNT(c.id) as Numbers FROM comment c GROUP BY c.idPost) kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
 	WHERE p.Visibility = "public" OR (p.Visibility = "followers" 
     AND u.id IN (SELECT f.idFollowed FROM follower f
@@ -279,9 +301,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPostFollowed`(idUser_ INT)
 BEGIN
-	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, COUNT(kom.id) AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
+	SELECT u.id as UserID, u.username, p.id as PostID, p.Content, p.DateOfPosting, kom.Numbers AS Comments, IF(COUNT(r.idUser)=0, 0, SUM(r.Value)) AS Rating FROM post p
 	LEFT OUTER JOIN user u ON p.idUser = u.id
-	LEFT OUTER JOIN comment kom ON kom.idPost = p.id
+	LEFT OUTER JOIN (SELECT c.idPost, COUNT(c.id) as Numbers FROM comment c GROUP BY c.idPost) kom ON kom.idPost = p.id
 	LEFT OUTER JOIN rating r ON r.idPost = p.id
 	WHERE p.Visibility = "followers" 
     AND u.id IN (SELECT f.idFollowed FROM follower f
@@ -329,12 +351,51 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProfilePosts`(idUser_ INT)
 BEGIN
-	SELECT p.id, p.Content, p.Visibility, p.DateOfPosting, SUM(r.Value) as Rating, COUNT(kom.id) as Comments FROM post p
+	SELECT p.id, p.Content, p.Visibility, p.DateOfPosting, SUM(r.Value) as Rating, kom.Numbers as Comments FROM post p
 	LEFT OUTER JOIN user u ON u.id = p.idUser
     LEFT OUTER JOIN rating r ON r.idPost = p.id
-    LEFT OUTER JOIN comment kom ON kom.idPost = p.id
+    LEFT OUTER JOIN (SELECT c.idPost, COUNT(c.id) as Numbers FROM comment c GROUP BY c.idPost) kom ON kom.idPost = p.id
 	WHERE u.id = idUser_
     GROUP BY p.id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetRatings` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetRatings`(idUser_ INT)
+BEGIN
+	SELECT r.idPost, r.Value FROM rating r
+    WHERE r.idUser = idUser_;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `MakeChat` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `MakeChat`(idParticipant1_ INT, idParticipant2_ INT)
+BEGIN
+	INSERT INTO chat (idParticipant1, idParticipant2) VALUES (idParticipant1_, idParticipant2_);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -361,6 +422,25 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `MakeMessage` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `MakeMessage`(idChat_ INT, idSender_ INT, content_ TEXT)
+BEGIN
+	INSERT INTO message (idChat, idSender, Content, TimeOfMessage) VALUES (idChat_, idSender_, content_, NOW());
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `MakePost` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -375,6 +455,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `MakePost`(idUser_ INT, content_ tex
 BEGIN
 	INSERT INTO Post (idUser, Content, Visibility, DateOfPosting) 
     VALUES (idUser_, content_, visibility_, NOW());
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `RatePost` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RatePost`(idUser_ INT, idPost_ INT, value_ INT)
+BEGIN
+	INSERT INTO rating (idPost, idUser, VALUE) VALUES (idPost_, idUser_, value_);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -401,6 +500,45 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `Unfollow` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Unfollow`(idFollower_ INT, idFollowed_ INT)
+BEGIN
+	DELETE FROM follower WHERE idFollower = idFollower_ and idFollowed = idFollowed_;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UnratePost` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UnratePost`(idUser_ INT, idPost_ INT)
+BEGIN
+	DELETE FROM rating r
+    WHERE r.idPost = idPost_ and idUser = idUser_;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -411,4 +549,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-11 19:49:43
+-- Dump completed on 2025-04-16 16:48:57

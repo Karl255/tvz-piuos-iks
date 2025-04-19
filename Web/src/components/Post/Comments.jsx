@@ -8,8 +8,10 @@ import { useMutation } from '@tanstack/react-query';
 import { addComment, getComments } from './PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 export function Comments({ postId, initialNumberOfComments }) {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [comments, setComments] = useState([]);
     const { id, Username } = useContext(AuthContext);
@@ -39,6 +41,11 @@ export function Comments({ postId, initialNumberOfComments }) {
         useAddComment({ idKorisnik: id, idPost: postId, content: data.content });
         setNewContent(data.content);
     }
+
+    function visitProfile(id) {
+        setOpen(false);
+        navigate(`/profile/${id}`);
+    }
     return (
         <>
             <div>
@@ -46,14 +53,16 @@ export function Comments({ postId, initialNumberOfComments }) {
                     onClick={() => useGetComments({ idObjava: postId })}
                     className="postIcon transition"
                 />{' '}
-                <div>{numberOfComments}</div>
+                <div>{numberOfComments ? numberOfComments : 0}</div>
             </div>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div className="modal commentsModal">
                     <div className="comments">
                         {comments.map((comment, index) => (
                             <div key={index}>
-                                <div className="postLink">{comment.Username}</div>
+                                <div className="postLink" onClick={() => visitProfile(comment.id)}>
+                                    {comment.Username}
+                                </div>
                                 <div style={{ color: 'var(--text)', fontStyle: 'italic', margin: '0.5em 0' }}>
                                     {comment.Content}
                                 </div>

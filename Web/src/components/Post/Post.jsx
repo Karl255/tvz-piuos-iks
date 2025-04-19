@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, Box } from '@mui/material';
@@ -9,25 +9,48 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Comments } from './Comments';
 import { Link } from 'react-router';
+import { useMutation } from '@tanstack/react-query';
+import { ratePost, unratePost } from './PostDataService';
+import { AuthContext } from '../../pages/Auth/Auth';
 
-export function Post({ post }) {
-    const [liked, setLiked] = useState(false);
-    const [disliked, setDisliked] = useState(false);
+export function Post({ post, rating }) {
+    const [userPostRating, setUserPostRating] = useState(rating ? rating.Value : 0);
     const [postRating, setPostRating] = useState(post.Rating);
+    const { id } = useContext(AuthContext);
 
-    function pressLike() {
-        setLiked((prevLiked) => {
-            const newLiked = !prevLiked;
-            setPostRating(newLiked ? postRating + 1 : postRating - 1);
-            return newLiked;
-        });
+    const { mutate: useRatePost } = useMutation({
+        mutationFn: ratePost,
+        onSuccess: (data, variables) => {
+            setUserPostRating(variables.value);
+            setPostRating((prev) => prev + variables.value);
+        },
+    });
+    const { mutateAsync: useUnratePostAsync, mutate: useUnratePost } = useMutation({
+        mutationFn: unratePost,
+        onSuccess: () => {
+            if (userPostRating === 1) setPostRating((prev) => prev - 1);
+            else setPostRating((prev) => prev + 1);
+            setUserPostRating(0);
+        },
+    });
+
+    async function pressLike() {
+        if (userPostRating === 0) useRatePost({ idKorisnik: id, idPost: post.PostID, value: 1 });
+        else if (userPostRating === 1) {
+            useUnratePost({ idKorisnik: id, idPost: post.PostID });
+        } else {
+            await useUnratePostAsync({ idKorisnik: id, idPost: post.PostID });
+            useRatePost({ idKorisnik: id, idPost: post.PostID, value: 1 });
+        }
     }
-    function pressDislike() {
-        setDisliked((prevDisliked) => {
-            const newDisliked = !prevDisliked;
-            setPostRating(newDisliked ? postRating - 1 : postRating + 1);
-            return newDisliked;
-        });
+    async function pressDislike() {
+        if (userPostRating === 0) useRatePost({ idKorisnik: id, idPost: post.PostID, value: -1 });
+        else if (userPostRating === -1) {
+            useUnratePost({ idKorisnik: id, idPost: post.PostID });
+        } else {
+            await useUnratePostAsync({ idKorisnik: id, idPost: post.PostID });
+            useRatePost({ idKorisnik: id, idPost: post.PostID, value: -1 });
+        }
     }
 
     useEffect(() => {
@@ -61,22 +84,21 @@ export function Post({ post }) {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '15%' }}>
                     <div>
                         <div className="postIcon transition" onClick={pressLike}>
-                            {liked ? (
+                            {userPostRating === 1 ? (
                                 <ThumbUpIcon
                                     sx={{
                                         color: 'var(--primary-color)',
-                                        opacity: liked ? '100%' : '0',
                                     }}
                                 />
                             ) : (
-                                <ThumbUpOffAltIcon sx={{ opacity: liked ? '0' : '100%' }} />
+                                <ThumbUpOffAltIcon />
                             )}
                         </div>
                     </div>
-                    <div>{postRating}</div>
+                    <div>{postRating ? postRating : 0}</div>
                     <div>
                         <div className="postIcon transition" onClick={pressDislike}>
-                            {disliked ? (
+                            {userPostRating === -1 ? (
                                 <ThumbDownIcon sx={{ color: 'var(--secondary-color)' }} />
                             ) : (
                                 <ThumbDownOffAltIcon />
@@ -94,4 +116,5 @@ export function Post({ post }) {
 
 Post.propTypes = {
     post: PropTypes.object,
+    rating: PropTypes.object,
 };

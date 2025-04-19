@@ -31,3 +31,9 @@ h1 {
     display: inline-block;
     width: 100%;
 }
+
+.label {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

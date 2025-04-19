@@ -8,7 +8,7 @@ export function LoadingPage() {
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: 'var(--background-darker)',
+        background: 'transparent',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

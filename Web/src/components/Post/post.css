@@ -3,7 +3,10 @@
     overflow: hidden;
 }
 .modal > div {
-    padding: 0 !important;
+    padding: 0;
+}
+.modal:focus {
+    outline: none;
 }
 .commentForm form {
     background-color: var(--background-darker);

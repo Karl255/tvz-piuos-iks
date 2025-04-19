@@ -35,7 +35,44 @@ module.exports = function(express, pool, jwt, secret) {
       } catch (e) {
         res.status(400).json({message: 'Bad request'});
       }
+    }).delete(async function (req,res){
+      try {
+        let rows = await pool.query('call Unfollow(?, ?)', [req.body.idKorisnik, req.body.idZapratiti], function (error, results, fields) {
+          res.status(200).json({message: 'Success!'});
+        })
+      } catch (e) {
+        res.status(400).json({message: 'Bad request'});
+      }
     });
+
+
+    apiRouter.route('/rate').post(async function (req,res){
+      try {
+        let rows = await pool.query('call RatePost(?, ?, ?)', [req.body.idKorisnik, req.body.idPost, req.body.value], function (error, results, fields) {
+          res.status(200).json({message: 'Success!'});
+        })
+      } catch (e) {
+        res.status(400).json({message: 'Bad request'});
+      }
+    }).delete(async function (req,res){
+      try {
+        let rows = await pool.query('call UnratePost(?, ?)', [req.body.idKorisnik, req.body.idPost], function (error, results, fields) {
+          res.status(200).json({message: 'Success!'});
+        })
+      } catch (e) {
+        res.status(400).json({message: 'Bad request'});
+      }
+    })
+
+    apiRouter.route('/ratings').post(async function (req,res){
+      try {
+        let rows = await pool.query('call GetRatings(?)', [req.body.idKorisnik], function (error, results, fields) {
+          res.status(200).json(results[0]);
+        })
+      } catch (e) {
+        res.status(400).json({message: 'Bad request'});
+      }
+    })
 
 
 
@@ -108,5 +145,38 @@ module.exports = function(express, pool, jwt, secret) {
           res.status(400).json({message: 'Bad request'});
       }
     });
+
+    apiRouter.route('/chats').post(async function (req, res) {
+      try {
+        let rows = await pool.query('call GetChat(?)', [req.body.idKorisnik], function(error, results, fields) {
+          res.status(200).json(results[0]);
+        });
+      } catch(e){
+          res.status(400).json({message: 'Bad request'});
+      }
+    });
+
+    apiRouter.route('/newchat').post(async function (req, res) {
+      try {
+        let rows = await pool.query('call MakeChat(?, ?)', [req.body.idKorisnik1, req.body.idKorisnik2], function(error, results, fields) {
+          res.status(200).json({message: 'Success!'});
+        });
+      } catch(e){
+          res.status(400).json({message: 'Bad request'});
+      }
+    });
+
+    apiRouter.route('/sendmessage').post(async function (req, res) {
+      try {
+        let rows = await pool.query('call MakeMessage(?, ?, ?)', [req.body.idChat, req.body.idKorisnik, req.body.content], function(error, results, fields) {
+          res.status(200).json({message: 'Success!'});
+        });
+      } catch(e){
+          res.status(400).json({message: 'Bad request'});
+      }
+    });
+
+
+
     return apiRouter;
 }

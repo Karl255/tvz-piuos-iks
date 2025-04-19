@@ -1,13 +1,16 @@
 import { Modal } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { addPost } from './PostDataService';
 import { LoadingPage } from '../LoadingPage';
 import { AuthContext } from '../../pages/Auth/Auth';
+import PropTypes from 'prop-types';
+import { Tooltip } from '../Tooltip/Tooltip';
 
-export function NewPost() {
+export function NewPost({ refetch }) {
     const [open, setOpen] = useState(false);
+    const queryClient = useQueryClient();
     const { reset, formState, register, handleSubmit } = useForm();
     const { id } = useContext(AuthContext);
 
@@ -15,7 +18,9 @@ export function NewPost() {
         mutationFn: addPost,
         onSuccess: () => {
             reset();
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
             setOpen(false);
+            refetch();
         },
     });
 
@@ -36,7 +41,11 @@ export function NewPost() {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <h1>New post</h1>
                                 <div>
-                                    <label htmlFor="content">Content</label>
+                                    <div className="label">
+                                        <label htmlFor="content">Content</label>
+                                        <Tooltip>Required between 1 - 281 characters</Tooltip>
+                                    </div>
+
                                     <textarea
                                         {...register('content', { required: true, minLength: 1, maxLength: 281 })}
                                         className={formState.errors.content && 'invalid'}
@@ -60,3 +69,7 @@ export function NewPost() {
         </>
     );
 }
+
+NewPost.propTypes = {
+    refetch: PropTypes.func,
+};

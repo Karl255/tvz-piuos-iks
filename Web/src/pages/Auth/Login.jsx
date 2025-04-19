@@ -5,6 +5,7 @@ import { loginUser } from './AuthDataService';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingPage } from '../../components/LoadingPage';
 import { ErrorMessage } from '../../components/ErrorMessage';
+import { Tooltip } from '../../components/Tooltip/Tooltip';
 
 export function Login({ setUser, setLoggedIn }) {
     const { formState, register, handleSubmit } = useForm();
@@ -30,7 +31,11 @@ export function Login({ setUser, setLoggedIn }) {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h1>Log In</h1>
                         <div>
-                            <label htmlFor="username">Username</label>
+                            <div className="label">
+                                <label htmlFor="username">Username</label>
+                                <Tooltip>Required between 5 - 20 characters</Tooltip>
+                            </div>
+
                             <input
                                 type="text"
                                 {...register('username', {
@@ -42,7 +47,11 @@ export function Login({ setUser, setLoggedIn }) {
                             />
                         </div>
                         <div>
-                            <label htmlFor="password">Password</label>
+                            <div className="label">
+                                <label htmlFor="password">Password</label>
+                                <Tooltip>Required between 8 - 20 characters</Tooltip>
+                            </div>
+
                             <input
                                 type="password"
                                 {...register('password', { required: true, minLength: 8, maxLength: 20 })}
@@ -52,8 +61,8 @@ export function Login({ setUser, setLoggedIn }) {
                         <button type="submit" className="greenButton">
                             Log in
                         </button>
+                        {isError && <ErrorMessage>Wrong Username or Password!</ErrorMessage>}
                     </form>
-                    {isError && <ErrorMessage>Wrong Username or Password!</ErrorMessage>}
                 </div>
             )}
         </>

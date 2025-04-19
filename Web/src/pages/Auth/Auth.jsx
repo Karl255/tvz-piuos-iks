@@ -16,7 +16,7 @@ export function Auth() {
         <>
             {loggedIn ? (
                 <AuthContext.Provider value={user}>
-                    <Navigation />
+                    <Navigation setLoggedIn={setLoggedIn} />
                 </AuthContext.Provider>
             ) : (
                 <div className="section auth">

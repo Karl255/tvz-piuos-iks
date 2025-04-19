@@ -1,3 +1,5 @@
+import { callApi } from '../../DataService';
+
 export async function getProfile({ route, id }) {
     const response = await fetch(`http://localhost:8080/api/${route}`, {
         method: 'POST',
@@ -26,4 +28,8 @@ export async function follow({ idUser, idFollow }) {
         throw new Error(res.message);
     }
     return res;
+}
+
+export async function unfollow({ idUser, idFollow }) {
+    return callApi({ method: 'DELETE', route: 'follow', data: { idKorisnik: idUser, idZapratiti: idFollow } });
 }
