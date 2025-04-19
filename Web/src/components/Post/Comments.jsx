@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import './post.css';
 import { useMutation } from '@tanstack/react-query';
-import { addComment, getComments } from './PostDataService';
+import { addComment, getComments } from '../../services/PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';

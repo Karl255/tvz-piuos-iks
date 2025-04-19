@@ -4,8 +4,8 @@ import { UserInfo } from './UserInfo';
 import './profile.css';
 import { useParams } from 'react-router';
 import { useQueries } from '@tanstack/react-query';
-import { getProfile } from './ProfileDataService';
-import { LoadingPage } from '../../components/LoadingPage';
+import { getProfile } from '../../services/ProfileDataService';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { PostsList } from '../../components/Post/PostsList';
 
 export function ProfilePage() {
@@ -25,10 +25,6 @@ export function ProfilePage() {
                 queryKey: ['followed', params.id],
                 queryFn: () => getProfile({ route: 'followed', id: params.id }),
             },
-            // {
-            //     queryKey: ['profilePosts', params.id],
-            //     queryFn: () => getProfile({ route: 'profileposts', id: params.id }),
-            // },
         ],
         combine: (results) => {
             return {
@@ -41,7 +37,7 @@ export function ProfilePage() {
     return (
         <>
             {queries.pending ? (
-                <LoadingPage />
+                <LoadingSpinner />
             ) : (
                 <>
                     <UserInfo user={queries.data[0]} followers={queries.data[1]} following={queries.data[2]} />

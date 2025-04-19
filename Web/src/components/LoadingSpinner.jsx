@@ -1,7 +1,7 @@
 import React from 'react';
 import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 
-export function LoadingPage() {
+export function LoadingSpinner() {
     const loadingDivStyle = {
         position: 'absolute',
         top: 0,

@@ -10,7 +10,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Comments } from './Comments';
 import { Link } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { ratePost, unratePost } from './PostDataService';
+import { ratePost, unratePost } from '../../services/PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
 
 export function Post({ post, rating }) {

@@ -1,4 +1,4 @@
-export async function callApi({ method, route, data }) {
+export async function callApi(method, route, data) {
     const response = await fetch(`http://localhost:8080/api/${route}`, {
         method: method,
         headers: {

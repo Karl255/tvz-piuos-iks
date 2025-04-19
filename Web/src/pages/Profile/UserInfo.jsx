@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { UsersListModal } from './UsersListModal';
 import { AuthContext } from '../Auth/Auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { follow, unfollow } from './ProfileDataService';
+import { follow, unfollow } from '../../services/ProfileDataService';
 import { useParams } from 'react-router';
 
 export function UserInfo({ user, followers, following }) {

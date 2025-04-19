@@ -1,9 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { loginUser } from './AuthDataService';
+import { loginUser } from '../../services/AuthDataService';
 import { useMutation } from '@tanstack/react-query';
-import { LoadingPage } from '../../components/LoadingPage';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 
@@ -25,7 +25,7 @@ export function Login({ setUser, setLoggedIn }) {
     return (
         <>
             {isPending ? (
-                <LoadingPage />
+                <LoadingSpinner />
             ) : (
                 <div>
                     <form onSubmit={handleSubmit(onSubmit)}>

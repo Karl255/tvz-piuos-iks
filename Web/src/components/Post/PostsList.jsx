@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import * as R from 'ramda';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { useQuery } from '@tanstack/react-query';
-import { fetchPostRatings, fetchPosts } from '../../components/Post/PostDataService';
-import { LoadingPage } from '../LoadingPage';
+import { fetchPostRatings, fetchPosts } from '../../services/PostDataService';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { Post } from './Post';
 import PropTypes from 'prop-types';
 
@@ -38,7 +38,7 @@ export function PostsList({ route, userId, sortKey, refetch }) {
     return (
         <>
             {postsPending || ratingsPending ? (
-                <LoadingPage />
+                <LoadingSpinner />
             ) : (
                 <>
                     {sortedPosts.map((objava) => {

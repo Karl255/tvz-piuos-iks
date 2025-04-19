@@ -1,9 +1,9 @@
 import { Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { registerUser } from './AuthDataService';
+import { registerUser } from '../../services/AuthDataService';
 import { useMutation } from '@tanstack/react-query';
-import { LoadingPage } from '../../components/LoadingPage';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 
@@ -26,7 +26,7 @@ export function Register() {
     return (
         <>
             {isPending ? (
-                <LoadingPage />
+                <LoadingSpinner />
             ) : (
                 <>
                     <button onClick={() => setOpen(true)}>Register</button>

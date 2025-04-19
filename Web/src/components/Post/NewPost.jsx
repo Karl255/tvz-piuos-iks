@@ -2,8 +2,8 @@ import { Modal } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { addPost } from './PostDataService';
-import { LoadingPage } from '../LoadingPage';
+import { addPost } from '../../services/PostDataService';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { AuthContext } from '../../pages/Auth/Auth';
 import PropTypes from 'prop-types';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -30,7 +30,7 @@ export function NewPost({ refetch }) {
     return (
         <>
             {isPending ? (
-                <LoadingPage />
+                <LoadingSpinner />
             ) : (
                 <>
                     <button onClick={() => setOpen(true)} className="greenButton">
