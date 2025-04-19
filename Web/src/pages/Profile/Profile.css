@@ -1,5 +1,8 @@
 .profile {
     cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
 
 .followersBar {
@@ -12,8 +15,6 @@
     grid-template-columns: 1fr 1fr;
 
     width: 33%;
-
-    margin-top: 1em;
 }
 .userInfo > div {
     margin-top: 0.5em;
@@ -22,9 +23,14 @@
     color: var(--text-darker);
 }
 
-.modal > div {
-    padding: 0.5em 1em;
+.userDiv {
+    padding: var(--button-padding);
 }
 .modal > div:nth-child(odd) {
     background-color: var(--background-darker);
+}
+
+.profileHeader {
+    display: flex;
+    justify-content: space-between;
 }

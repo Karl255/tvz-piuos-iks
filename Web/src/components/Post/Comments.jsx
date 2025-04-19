@@ -1,64 +1,83 @@
 import { Modal } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PropTypes from 'prop-types';
 
 import './post.css';
+import { useMutation } from '@tanstack/react-query';
+import { addComment, getComments } from '../../services/PostDataService';
+import { AuthContext } from '../../pages/Auth/Auth';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
-export function Comments({ postId, numberOfComments, incrementComments }) {
+export function Comments({ postId, initialNumberOfComments }) {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [comments, setComments] = useState([]);
-    async function fetchData(route, body) {
-        try {
-            let response = await fetch(`http://localhost:8080/api/${route}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            });
-            let res = await response.json();
-            if (route === 'comments') {
-                setComments(res);
-                setOpen(true);
-            } else {
-                incrementComments();
-                setOpen(false);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    const fetchDataAsync = async (route, body) => {
-        await fetchData(route, body);
-    };
+    const { id, Username } = useContext(AuthContext);
+    const [numberOfComments, setNumberOfComments] = useState(initialNumberOfComments);
+    const [newContent, setNewContent] = useState('');
 
-    function submitComment(event) {
-        event.preventDefault();
-        fetchDataAsync('makecomment', { idKorisnik: 5, idPost: postId, content: event.target.newComment.value });
+    const { reset, formState, register, handleSubmit } = useForm();
+
+    const { mutate: useGetComments } = useMutation({
+        mutationFn: getComments,
+        onSuccess: (res) => {
+            setComments(res);
+            setOpen(true);
+        },
+    });
+
+    const { mutate: useAddComment } = useMutation({
+        mutationFn: addComment,
+        onSuccess: () => {
+            setNumberOfComments((prev) => prev + 1);
+            setComments([...comments, { id, Username, Content: newContent }]);
+            reset();
+        },
+    });
+
+    function submitComment(data) {
+        useAddComment({ idKorisnik: id, idPost: postId, content: data.content });
+        setNewContent(data.content);
+    }
+
+    function visitProfile(id) {
+        setOpen(false);
+        navigate(`/profile/${id}`);
     }
     return (
         <>
             <div>
                 <ChatBubbleOutlineIcon
-                    onClick={() => fetchDataAsync('comments', { idObjava: postId })}
+                    onClick={() => useGetComments({ idObjava: postId })}
                     className="postIcon transition"
                 />{' '}
-                <div>{numberOfComments}</div>
+                <div>{numberOfComments ? numberOfComments : 0}</div>
             </div>
             <Modal open={open} onClose={() => setOpen(false)}>
-                <div className="modal">
-                    {comments.map((comment, index) => (
-                        <div key={index}>
-                            <div style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>{comment.Username}</div>
-                            <div style={{ color: 'var(--text)', fontStyle: 'italic', margin: '0.5em 0' }}>
-                                {comment.Content}
+                <div className="modal commentsModal">
+                    <div className="comments">
+                        {comments.map((comment, index) => (
+                            <div key={index}>
+                                <div className="postLink" onClick={() => visitProfile(comment.id)}>
+                                    {comment.Username}
+                                </div>
+                                <div style={{ color: 'var(--text)', fontStyle: 'italic', margin: '0.5em 0' }}>
+                                    {comment.Content}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+
                     <div className="commentForm">
-                        <form onSubmit={submitComment}>
-                            <input type="text" placeholder="Comment" name="newComment" id="newComment" />
+                        <form onSubmit={handleSubmit(submitComment)}>
+                            <input
+                                type="text"
+                                placeholder="Comment"
+                                {...register('content', { required: true, minLength: 1, maxLength: 200 })}
+                                className={formState.errors.content && 'invalid'}
+                            />
                             <button type="submit" style={{ width: 'fit-content' }}>
                                 Submit
                             </button>
@@ -72,6 +91,6 @@ export function Comments({ postId, numberOfComments, incrementComments }) {
 
 Comments.propTypes = {
     postId: PropTypes.number,
-    numberOfComments: PropTypes.number,
+    initialNumberOfComments: PropTypes.number,
     incrementComments: PropTypes.func,
 };

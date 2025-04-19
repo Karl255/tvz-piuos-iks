@@ -1,8 +1,0 @@
-.addPostButton {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--background-darker);
-}
-.addPostButton:hover {
-    background-color: transparent;
-}
