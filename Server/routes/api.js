@@ -60,7 +60,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/ratings').post(async function (req,res){
       try {
-        let [rows] = await pool.query('call GetRatings(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetRatings(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch (e) {
         res.status(400).json({message: 'Bad request'});
@@ -71,16 +71,16 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/objave').post(async function (req,res){
       try {
-        let [rows] = await pool.query('call GetPost(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetPost(?)', [req.body.idKorisnik]);
         res.status(200).json(rows);
       } catch (e) {
-        res.status(400).json({message: 'Bad request'});
+        res.status(400).json({message: e.message});
       }
     });
 
     apiRouter.route('/profileposts').post(async function (req,res){
       try {
-        let [rows] = await pool.query('call GetProfilePosts(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetProfilePosts(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch (e) {
         res.status(400).json({message: 'Bad request'});
@@ -89,7 +89,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/objavepratitelja').post(async function (req,res){
       try {
-        let [rows] = await pool.query('call GetPostFollowed(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetPostFollowed(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch (e) {
         res.status(400).json({message: 'Bad request'});
@@ -98,7 +98,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/profile').post(async function (req, res) {
       try {
-        let [rows] = await pool.query('call GetProfile(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetProfile(?)', [req.body.idKorisnik]);
           res.status(200).json(rows[0]);
       } catch(e){
           res.status(400).json({message: 'Bad request'});
@@ -107,7 +107,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/followers').post(async function (req, res) {
       try {
-        let [rows] = await pool.query('call GetFollowers(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetFollowers(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch(e){
           res.status(400).json({message: 'Bad request'});
@@ -116,7 +116,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/followed').post(async function (req, res) {
       try {
-        let [rows] = await pool.query('call GetFollowed(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetFollowed(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch(e){
           res.status(400).json({message: 'Bad request'});
@@ -125,7 +125,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/comments').post(async function (req, res) {
       try {
-        let [rows] = await pool.query('call GetComments(?)', [req.body.idObjava]);
+        let [[rows]] = await pool.query('call GetComments(?)', [req.body.idObjava]);
           res.status(200).json(rows);
       } catch(e){
           res.status(400).json({message: 'Bad request'});
@@ -134,7 +134,7 @@ module.exports = function(express, pool, jwt, secret) {
 
     apiRouter.route('/chats').post(async function (req, res) {
       try {
-        let [rows] = await pool.query('call GetChat(?)', [req.body.idKorisnik]);
+        let [[rows]] = await pool.query('call GetChat(?)', [req.body.idKorisnik]);
           res.status(200).json(rows);
       } catch(e){
           res.status(400).json({message: 'Bad request'});
