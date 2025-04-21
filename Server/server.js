@@ -4,7 +4,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const config = require('./config');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const jwt = require('jsonwebtoken');
 
 const pool = mysql.createPool(config.pool);
