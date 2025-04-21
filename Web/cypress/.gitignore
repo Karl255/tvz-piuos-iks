@@ -1,6 +1,2 @@
 # cypress artifacts
 screenshots
-
-# example files that I have but don't want to delete just yet
-e2e/1-getting-started
-e2e/2-advanced-examples
