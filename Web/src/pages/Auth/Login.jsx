@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
+import { LOGIN_BUTTON, PASSWORD_INPUT, USERNAME_INPUT } from '../../constants/test-ids';
 
 export function Login({ setUser, setLoggedIn }) {
     const { formState, register, handleSubmit } = useForm();
@@ -44,6 +45,7 @@ export function Login({ setUser, setLoggedIn }) {
                                     maxLength: 20,
                                 })}
                                 className={formState.errors.username && 'invalid'}
+                                data-test-id={USERNAME_INPUT}
                             />
                         </div>
                         <div>
@@ -56,9 +58,10 @@ export function Login({ setUser, setLoggedIn }) {
                                 type="password"
                                 {...register('password', { required: true, minLength: 8, maxLength: 20 })}
                                 className={formState.errors.password && 'invalid'}
+                                data-test-id={PASSWORD_INPUT}
                             />
                         </div>
-                        <button type="submit" className="greenButton">
+                        <button type="submit" className="greenButton" data-test-id={LOGIN_BUTTON}>
                             Log in
                         </button>
                         {isError && <ErrorMessage>Wrong Username or Password!</ErrorMessage>}

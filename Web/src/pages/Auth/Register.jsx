@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
+import { REGISTER_BUTTON } from '../../constants/test-ids';
 
 export function Register() {
     const [open, setOpen] = useState(false);
@@ -29,7 +30,9 @@ export function Register() {
                 <LoadingSpinner />
             ) : (
                 <>
-                    <button onClick={() => setOpen(true)}>Register</button>
+                    <button onClick={() => setOpen(true)} data-test-id={REGISTER_BUTTON}>
+                        Register
+                    </button>
 
                     <Modal open={open} onClose={() => setOpen(false)}>
                         <div className="modal auth section">
