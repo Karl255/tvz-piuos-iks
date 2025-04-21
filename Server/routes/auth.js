@@ -28,8 +28,8 @@ module.exports = function(express, pool, jwt, secret) {
   
     authRouter.route('/login').post(async function (req, res) {
         try {
-          let [[rows]] = await pool.query('SELECT * FROM user WHERE Username = ?', [req.body.username]);
-            if ([[rows]].length>0 && await bcrypt.compare(req.body.password, rows[0].Password)) {
+          let rows = await pool.query('SELECT * FROM user WHERE Username = ?', [req.body.username]);
+            if (rows.length>0 && await bcrypt.compare(req.body.password, rows[0].Password)) {
               const token = jwt.sign({
                 username:rows[0].username,
                 id:rows[0].id,
