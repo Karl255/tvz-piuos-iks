@@ -18,7 +18,7 @@ module.exports = function(express, pool, jwt, secret) {
         }
         
         try {
-          let rows = await pool.query('call RegisterUser(?)', [Object.values(req.body)], function(error, results, fields) {
+          await pool.query('call RegisterUser(?)', [Object.values(req.body)], function(error, results, fields) {
             res.status(200).json({message: "Status code of 200!"});
           });
         } catch(e){
@@ -28,24 +28,23 @@ module.exports = function(express, pool, jwt, secret) {
   
     authRouter.route('/login').post(async function (req, res) {
         try {
-          let rows = await pool.query('SELECT * FROM user WHERE Username = ?', [req.body.username], async function(error, results, fields) {
-            if (results.length>0 && await bcrypt.compare(req.body.password, results[0].Password)) {
+          let [rows] = await pool.query('SELECT * FROM user WHERE Username = ?', [req.body.username]);
+            if ([rows].length>0 && await bcrypt.compare(req.body.password, rows[0].Password)) {
               const token = jwt.sign({
-                username:results[0].username,
-                id:results[0].id,
+                username:rows[0].username,
+                id:rows[0].id,
             }, secret, {
                 expiresIn:3600
             });
-            res.status(200).json({token:token, user:results[0]});
+            res.status(200).json({token:token, user:rows[0]});
             }
             else {
                 res.status(401).json({message: 'UNAUTHORIZED'});
             }
-          });
-  
-        } catch (e) {
-            res.status(400).json({message: 'Bad request'});
-        }
+          }
+          catch (e) {
+            res.status(400).json({message: "Bad request"});
+          }
     });
 
     return authRouter;
