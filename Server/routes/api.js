@@ -141,6 +141,9 @@ module.exports = function(express, pool, jwt, secret) {
       }
     });
 
+
+    apiRouter.route('/chat').post
+
     apiRouter.route('/newchat').post(async function (req, res) {
       try {
         await pool.query('call MakeChat(?, ?)', [req.body.idKorisnik1, req.body.idKorisnik2]);
@@ -158,6 +161,26 @@ module.exports = function(express, pool, jwt, secret) {
           res.status(400).json({message: 'Bad request'});
       }
     });
+
+    apiRouter.route('/editPost').put(async function (req, res) {
+      try {
+        await pool.query('call EditPost(?, ?, ?)', [req.body.idPost, req.body.content, req.body.visibility]);
+          res.status(200).json({message: 'Success!'});
+      } catch(e){
+          res.status(400).json({message: 'Bad request'});
+      }
+    });
+
+    apiRouter.route('/editProfile').put(async function (req, res) {
+      try {
+        await pool.query('call EditProfile(?, ?)', [req.body.idKorisnik, req.body.username]);
+          res.status(200).json({message: 'Success!'});
+      } catch(e){
+          res.status(400).json({message: 'Bad request'});
+      }
+    });
+
+
 
 
 

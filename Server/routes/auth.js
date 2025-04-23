@@ -22,7 +22,7 @@ module.exports = function(express, pool, jwt, secret) {
             res.status(200).json({message: "Status code of 200!"});
           });
         } catch(e){
-            res.status(400).json({message: 'Bad request'});
+            res.status(400).json({message: e.message});
         }
     });
   
