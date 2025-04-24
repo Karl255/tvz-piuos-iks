@@ -28,8 +28,6 @@
     -moz-osx-font-smoothing: grayscale;
 
     scrollbar-gutter: stable;
-
-    user-select: none;
 }
 
 ::selection {
@@ -159,6 +157,11 @@ label {
     background-color: var(--primary-color-trans);
 }
 
+.darkerButton {
+    background-color: var(--background-darker);
+    color: var(--text-darker);
+}
+
 /*Input switch*/
 .switch {
     margin-top: 0.5em;
@@ -204,4 +207,20 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(1.125em); /* knob slides the full width minus knob size and padding */
+}
+
+.flexHorizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}
+.flexVertical {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.flexVerticalAlign {
+    display: flex;
+    vertical-align: middle;
 }

@@ -40,7 +40,7 @@ export function Navigation({ setLoggedIn }) {
             <Routes>
                 <Route path="/feed" element={<Feed />} />
                 <Route path="/inbox" element={<Inbox />} />
-                <Route path="/chat" element={<Chat />} />
+                <Route path="/inbox/chat/:id" element={<Chat />} />
                 <Route path="/profile/:id" element={<ProfilePage />} />
                 <Route path="/" element={<Navigate to="/feed" />} />
             </Routes>

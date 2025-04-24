@@ -34,3 +34,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.chatIcon {
+    margin-left: 0.2em;
+    font-size: smaller;
+    transform: scale(0.9) translateY(1px);
+}

@@ -6,13 +6,17 @@ import { UsersListModal } from './UsersListModal';
 import { AuthContext } from '../Auth/Auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { follow, unfollow } from '../../services/ProfileDataService';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
+import { addChat } from '../../services/ChatsDataService';
 
 export function UserInfo({ user, followers, following }) {
     const { id } = useContext(AuthContext);
     const params = useParams();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [followingStatus, setFollowingStatus] = useState(false);
+    const isLoggedUser = id === user.id;
 
     const { mutate: setFollow } = useMutation({
         mutationFn: follow,
@@ -26,6 +30,13 @@ export function UserInfo({ user, followers, following }) {
         onSuccess: () => {
             setFollowingStatus(false);
             queryClient.invalidateQueries({ queryKey: ['followers', params.id] });
+        },
+    });
+
+    const { mutate: createChat } = useMutation({
+        mutationFn: addChat,
+        onSuccess: (data) => {
+            navigate(`/inbox/chat/${data[0].chatId}`, { state: { username: user.Username } });
         },
     });
 
@@ -44,9 +55,9 @@ export function UserInfo({ user, followers, following }) {
         <Container className="profile section">
             <div className="profileHeader">
                 <h1>
-                    {user.Username} {id === user.id && <EditIcon sx={{ cursor: 'pointer' }} />}
+                    {user.Username} {isLoggedUser && <EditIcon sx={{ cursor: 'pointer' }} />}
                 </h1>
-                {id !== user.id && (
+                {!isLoggedUser && (
                     <button
                         onClick={() => useSetFollow()}
                         className={!followingStatus ? 'greenButton' : 'greenButtonTrans'}
@@ -56,9 +67,20 @@ export function UserInfo({ user, followers, following }) {
                 )}
             </div>
 
-            <div className="followersBar">
-                <UsersListModal title={followers.length + ' followers'} list={followers} />
-                <UsersListModal title={following.length + ' following'} list={following} />
+            <div className="flexHorizontal">
+                <div className="followersBar">
+                    <UsersListModal title={followers.length + ' followers'} list={followers} />
+                    <UsersListModal title={following.length + ' following'} list={following} />
+                </div>
+                {!isLoggedUser && (
+                    <button
+                        className="darkerButton flexVerticalAlign"
+                        onClick={() => createChat({ id1: id, id2: user.id })}
+                    >
+                        Message user
+                        <MessageRoundedIcon className="chatIcon" />
+                    </button>
+                )}
             </div>
 
             <div className="userInfo">

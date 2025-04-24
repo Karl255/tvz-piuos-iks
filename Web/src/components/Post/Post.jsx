@@ -12,11 +12,12 @@ import { Link } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { ratePost, unratePost } from '../../services/PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
+import { formatDatePost } from './formatDatePost';
 
 export function Post({ post, rating }) {
     const [userPostRating, setUserPostRating] = useState(rating ? rating.Value : 0);
-    const [postRating, setPostRating] = useState(post.Rating);
-    const { id } = useContext(AuthContext);
+    const [postRating, setPostRating] = useState(+post.Rating);
+    const { id, Username } = useContext(AuthContext);
 
     const { mutate: useRatePost } = useMutation({
         mutationFn: ratePost,
@@ -54,7 +55,7 @@ export function Post({ post, rating }) {
     }
 
     useEffect(() => {
-        setPostRating(post.Rating);
+        setPostRating(+post.Rating);
     }, [post]);
 
     return (
@@ -63,10 +64,7 @@ export function Post({ post, rating }) {
                 <Link to={`/profile/${post.UserID}`} className="postLink">
                     {post.Username}
                 </Link>
-                <div style={{ color: 'var(--text-darker)' }}>
-                    {' '}
-                    {post.DateOfPosting && post.DateOfPosting.slice(0, 10)}
-                </div>
+                <div style={{ color: 'var(--text-darker)' }}> {formatDatePost(post.DateOfPosting)}</div>
             </Box>
 
             <Box
@@ -83,7 +81,7 @@ export function Post({ post, rating }) {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }} className="bottomBar">
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '15%' }}>
                     <div>
-                        <div className="postIcon transition" onClick={pressLike}>
+                        <div className="postIcon transition" onClick={post.Username !== Username && pressLike}>
                             {userPostRating === 1 ? (
                                 <ThumbUpIcon
                                     sx={{
@@ -95,9 +93,9 @@ export function Post({ post, rating }) {
                             )}
                         </div>
                     </div>
-                    <div>{postRating ? postRating : 0}</div>
+                    <div>{postRating}</div>
                     <div>
-                        <div className="postIcon transition" onClick={pressDislike}>
+                        <div className="postIcon transition" onClick={post.Username !== Username && pressDislike}>
                             {userPostRating === -1 ? (
                                 <ThumbDownIcon sx={{ color: 'var(--secondary-color)' }} />
                             ) : (

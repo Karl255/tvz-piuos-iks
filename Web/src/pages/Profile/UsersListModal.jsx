@@ -13,7 +13,7 @@ export function UsersListModal({ title, list }) {
     }
     return (
         <>
-            <button style={{ marginRight: '0.5em' }} onClick={() => setOpen(true)}>
+            <button style={{ marginRight: '0.5em' }} onClick={list.length && (() => setOpen(true))}>
                 {title}
             </button>
             <Modal open={open} onClose={() => setOpen(false)} sx={{ maxHeight: 'fit-content' }}>

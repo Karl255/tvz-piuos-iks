@@ -7,6 +7,8 @@ export async function callApi(method, route, data) {
         body: JSON.stringify(data),
     });
     const res = await response.json();
+    console.log(res);
+
     if (!response.ok) {
         throw new Error(res.message);
     }

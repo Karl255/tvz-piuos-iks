@@ -9,6 +9,7 @@ import { addComment, getComments } from '../../services/PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export function Comments({ postId, initialNumberOfComments }) {
     const navigate = useNavigate();
@@ -28,7 +29,7 @@ export function Comments({ postId, initialNumberOfComments }) {
         },
     });
 
-    const { mutate: useAddComment } = useMutation({
+    const { isPending, mutate: useAddComment } = useMutation({
         mutationFn: addComment,
         onSuccess: () => {
             setNumberOfComments((prev) => prev + 1);
@@ -48,6 +49,7 @@ export function Comments({ postId, initialNumberOfComments }) {
     }
     return (
         <>
+            {isPending && <LoadingSpinner />}
             <div>
                 <ChatBubbleOutlineIcon
                     onClick={() => useGetComments({ idObjava: postId })}
@@ -58,16 +60,20 @@ export function Comments({ postId, initialNumberOfComments }) {
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div className="modal commentsModal">
                     <div className="comments">
-                        {comments.map((comment, index) => (
-                            <div key={index}>
-                                <div className="postLink" onClick={() => visitProfile(comment.id)}>
-                                    {comment.Username}
+                        {comments.length ? (
+                            comments.map((comment, index) => (
+                                <div key={index}>
+                                    <div className="postLink" onClick={() => visitProfile(comment.id)}>
+                                        {comment.Username}
+                                    </div>
+                                    <div style={{ color: 'var(--text)', fontStyle: 'italic', margin: '0.5em 0' }}>
+                                        {comment.Content}
+                                    </div>
                                 </div>
-                                <div style={{ color: 'var(--text)', fontStyle: 'italic', margin: '0.5em 0' }}>
-                                    {comment.Content}
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <div>No comments</div>
+                        )}
                     </div>
 
                     <div className="commentForm">
