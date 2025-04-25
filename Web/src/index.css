@@ -59,6 +59,9 @@ button {
     cursor: pointer;
     align-items: center;
 
+    display: flex;
+    vertical-align: middle;
+
     transition: var(--transition);
 }
 button:hover {

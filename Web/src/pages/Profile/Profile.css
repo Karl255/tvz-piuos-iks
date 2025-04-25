@@ -2,9 +2,10 @@
     cursor: default;
     display: flex;
     flex-direction: column;
-    gap: 1em;
 }
-
+.profile button {
+    height: 32.8px;
+}
 .followersBar {
     display: flex;
     flex-direction: row;

@@ -47,3 +47,63 @@
 .postLink:hover {
     text-decoration: underline;
 }
+
+.postDateDiv {
+    position: relative;
+    min-width: 50%;
+}
+.postDate {
+    color: var(--text-darker);
+    z-index: 1;
+}
+.editPostButton {
+    padding: 2px 0.7em;
+    opacity: 0;
+    z-index: 2;
+    gap: 0.3em;
+}
+.editPostButton svg {
+    transform: scale(0.9);
+}
+.postDate,
+.editPostButton {
+    position: absolute;
+    right: 0;
+    transition: var(--transition);
+}
+.post:hover .editPostButtonDiv .postDate {
+    opacity: 0;
+    transition: var(--transition);
+}
+.post:hover .editPostButton {
+    opacity: 1;
+    transition: var(--transition);
+}
+
+.post + .flexHorizontal {
+    min-height: 1em;
+}
+.postContent {
+    margin: 0.8em 0;
+    border-radius: var(--border-radius);
+    padding: 1em;
+    background-color: var(--background-darker);
+}
+.ratingButtons {
+    display: flex;
+    justify-content: left;
+    gap: 1em;
+}
+
+.postTopBar {
+    user-select: none;
+}
+
+.postTopBarLeft {
+    display: flex;
+    justify-content: left;
+}
+
+.postTopBarLeft div {
+    color: var(--text-darker);
+}

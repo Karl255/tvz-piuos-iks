@@ -57,22 +57,14 @@ export function UserInfo({ user, followers, following }) {
                 <h1>
                     {user.Username} {isLoggedUser && <EditIcon sx={{ cursor: 'pointer' }} />}
                 </h1>
-                {!isLoggedUser && (
-                    <button
-                        onClick={() => useSetFollow()}
-                        className={!followingStatus ? 'greenButton' : 'greenButtonTrans'}
-                    >
-                        {followingStatus ? 'Unfollow' : 'Follow'}
-                    </button>
-                )}
-            </div>
-
-            <div className="flexHorizontal">
                 <div className="followersBar">
                     <UsersListModal title={followers.length + ' followers'} list={followers} />
                     <UsersListModal title={following.length + ' following'} list={following} />
                 </div>
-                {!isLoggedUser && (
+            </div>
+
+            {!isLoggedUser && (
+                <div className="flexHorizontal">
                     <button
                         className="darkerButton flexVerticalAlign"
                         onClick={() => createChat({ id1: id, id2: user.id })}
@@ -80,8 +72,14 @@ export function UserInfo({ user, followers, following }) {
                         Message user
                         <MessageRoundedIcon className="chatIcon" />
                     </button>
-                )}
-            </div>
+                    <button
+                        onClick={() => useSetFollow()}
+                        className={!followingStatus ? 'greenButton' : 'greenButtonTrans'}
+                    >
+                        {followingStatus ? 'Unfollow' : 'Follow'}
+                    </button>
+                </div>
+            )}
 
             <div className="userInfo">
                 <div>First name:</div>

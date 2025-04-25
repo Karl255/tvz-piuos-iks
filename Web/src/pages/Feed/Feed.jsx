@@ -1,20 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { Box } from '@mui/material';
+import React, { useContext } from 'react';
 import './feed.css';
-import { NewPost } from '../../components/Post/NewPost';
 import { AuthContext } from '../Auth/Auth';
 import { PostsList } from '../../components/Post/PostsList';
 
 export function Feed() {
     const user = useContext(AuthContext);
-    const [sortKey, setSortKey] = useState('Rating');
-    const [filter, setFilter] = useState('objave');
-    const [triggerRefetch, setTriggerRefetch] = useState(true);
 
     return (
         <>
-            <Box className="frontPageBar">
-                <NewPost refetch={setTriggerRefetch} />
+            {/* <Box className="frontPageBar">
+                <PostForm refetch={setTriggerRefetch} type="new" />
                 <div>
                     <button onClick={() => setFilter('objave')} className={filter === 'objave' && 'buttonSelected'}>
                         Public
@@ -38,9 +33,8 @@ export function Feed() {
                         New
                     </button>
                 </div>
-            </Box>
-            <Box className="filterSortBar"></Box>
-            <PostsList route={filter} userId={user.id} sortKey={sortKey} refetch={triggerRefetch} />
+            </Box> */}
+            <PostsList route={'objave'} userId={user.id} />
         </>
     );
 }

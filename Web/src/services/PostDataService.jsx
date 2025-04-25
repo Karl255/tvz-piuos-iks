@@ -12,6 +12,10 @@ export async function addPost(data) {
     return callApi('POST', 'makepost', data);
 }
 
+export async function editPost(data) {
+    return callApi('PUT', 'editPost', data);
+}
+
 export async function getComments(data) {
     return callApi('POST', 'comments', data);
 }

@@ -1,5 +1,5 @@
 import { differenceInDays, format } from 'date-fns';
-import { daysInWeek } from 'date-fns/constants';
+import { enUS } from 'date-fns/locale';
 
 export function formatDateChat(date) {
     const now = new Date();
@@ -9,7 +9,7 @@ export function formatDateChat(date) {
         return timeFormatted;
     }
     if (dayDifference <= 7) {
-        return `${daysInWeek(date)} ${timeFormatted}`;
+        return `${format(date, 'EEE', { locale: enUS })}, ${timeFormatted}`;
     }
     return format('DD.MM.YYYY. HH:mm');
 }

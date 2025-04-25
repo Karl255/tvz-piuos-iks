@@ -8,22 +8,28 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Comments } from './Comments';
-import { Link } from 'react-router';
-import { useMutation } from '@tanstack/react-query';
+import { Link, useLocation, useParams } from 'react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ratePost, unratePost } from '../../services/PostDataService';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { formatDatePost } from './formatDatePost';
+import { PostForm } from './PostForm';
 
 export function Post({ post, rating }) {
     const [userPostRating, setUserPostRating] = useState(rating ? rating.Value : 0);
     const [postRating, setPostRating] = useState(+post.Rating);
     const { id, Username } = useContext(AuthContext);
+    const { pathname } = useLocation();
+    const params = useParams();
+    const usersPost = pathname.includes('/feed') ? Username === post.Username : +params.id === +id;
+    const queryClient = useQueryClient();
 
     const { mutate: useRatePost } = useMutation({
         mutationFn: ratePost,
         onSuccess: (data, variables) => {
             setUserPostRating(variables.value);
             setPostRating((prev) => prev + variables.value);
+            queryClient.invalidateQueries({ queryKey: ['postRatings', id] });
         },
     });
     const { mutateAsync: useUnratePostAsync, mutate: useUnratePost } = useMutation({
@@ -32,6 +38,7 @@ export function Post({ post, rating }) {
             if (userPostRating === 1) setPostRating((prev) => prev - 1);
             else setPostRating((prev) => prev + 1);
             setUserPostRating(0);
+            queryClient.invalidateQueries({ queryKey: ['postRatings', id] });
         },
     });
 
@@ -59,51 +66,45 @@ export function Post({ post, rating }) {
     }, [post]);
 
     return (
-        <Container className="section">
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Link to={`/profile/${post.UserID}`} className="postLink">
-                    {post.Username}
-                </Link>
-                <div style={{ color: 'var(--text-darker)' }}> {formatDatePost(post.DateOfPosting)}</div>
+        <Container className="section post">
+            <Box className="flexHorizontal postTopBar">
+                <div className="postTopBarLeft">
+                    <Link to={`/profile/${post.UserID}`} className="postLink">
+                        {post.Username}
+                    </Link>
+                    <div style={post.Username ? { marginLeft: '0.5em' } : undefined}>{post.Visibility}</div>
+                </div>
+
+                <div className={usersPost ? 'postDateDiv editPostButtonDiv' : 'postDateDiv'}>
+                    <div className="postDate">{formatDatePost(post.DateOfPosting)}</div>
+                    {usersPost && <PostForm post={post} type="edit" />}
+                </div>
             </Box>
 
-            <Box
-                sx={{
-                    margin: '0.8em 0',
-                    borderRadius: '8px',
-                    padding: '1em',
-                    backgroundColor: 'var(--background-darker)',
-                }}
-            >
-                {post.Content}
-            </Box>
+            <Box className="postContent">{post.Content}</Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }} className="bottomBar">
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '15%' }}>
-                    <div>
-                        <div className="postIcon transition" onClick={post.Username !== Username && pressLike}>
-                            {userPostRating === 1 ? (
-                                <ThumbUpIcon
-                                    sx={{
-                                        color: 'var(--primary-color)',
-                                    }}
-                                />
-                            ) : (
-                                <ThumbUpOffAltIcon />
-                            )}
-                        </div>
+            <Box className="bottomBar flexHorizontal">
+                <div className="ratingButtons">
+                    <div className="postIcon transition" onClick={!usersPost ? pressLike : undefined}>
+                        {userPostRating === 1 ? (
+                            <ThumbUpIcon
+                                sx={{
+                                    color: 'var(--primary-color)',
+                                }}
+                            />
+                        ) : (
+                            <ThumbUpOffAltIcon />
+                        )}
                     </div>
                     <div>{postRating}</div>
-                    <div>
-                        <div className="postIcon transition" onClick={post.Username !== Username && pressDislike}>
-                            {userPostRating === -1 ? (
-                                <ThumbDownIcon sx={{ color: 'var(--secondary-color)' }} />
-                            ) : (
-                                <ThumbDownOffAltIcon />
-                            )}
-                        </div>
+                    <div className="postIcon transition" onClick={!usersPost ? pressDislike : undefined}>
+                        {userPostRating === -1 ? (
+                            <ThumbDownIcon sx={{ color: 'var(--secondary-color)' }} />
+                        ) : (
+                            <ThumbDownOffAltIcon />
+                        )}
                     </div>
-                </Box>
+                </div>
                 <Box>
                     <Comments initialNumberOfComments={post.Comments} postId={post.PostID} />
                 </Box>
