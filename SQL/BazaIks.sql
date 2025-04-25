@@ -379,7 +379,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `MakePost`(idUser_ INT, content_ text, visibility_ varchar(10))
 BEGIN
-	INSERT INTO Post (idUser, Content, Visibility, DateOfPosting) 
+	INSERT INTO post (idUser, Content, Visibility, DateOfPosting) 
     VALUES (idUser_, content_, visibility_, NOW());
 END */$$
 DELIMITER ;
@@ -404,7 +404,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser`(username_ VARCHAR(45), password_ TEXT, name_ VARCHAR(45), surname_ VARCHAR(45), dateofbirth_ DATE)
 BEGIN
-	INSERT INTO USER (Username, PASSWORD, NAME, surname, DateOfBirth) VALUES 
+	INSERT INTO user (Username, PASSWORD, NAME, surname, DateOfBirth) VALUES 
 	(username_, password_, name_, surname_, dateofbirth_);
 END */$$
 DELIMITER ;

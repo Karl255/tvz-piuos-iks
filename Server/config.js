@@ -5,7 +5,7 @@ module.exports = {
     host: "localhost", //localhost je default
     user: "root", //root je default
     password: "rootpass", //dopisati lozinku za lokalni mysql
-    database: "IKS", //naziv baze podataka
+    database: "iks", //naziv baze podataka
   },
   secret: "najjacisecretikad",
 };

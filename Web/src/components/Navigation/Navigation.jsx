@@ -13,6 +13,7 @@ import './navigation.css';
 import { AuthContext } from '../../pages/Auth/Auth';
 import { Chat } from '../../pages/Inbox/Chat';
 import PropTypes from 'prop-types';
+import { USERNAME_DISPLAY } from '../../constants/test-ids';
 
 export function Navigation({ setLoggedIn }) {
     const user = useContext(AuthContext);
@@ -31,7 +32,7 @@ export function Navigation({ setLoggedIn }) {
                     className={'link ' + (pathname.match(`/profile/${user.id}`) && 'activePage')}
                 >
                     <AccountCircleIcon className="icon" />
-                    <p>{user.Username}</p>
+                    <p data-test-id={USERNAME_DISPLAY}>{user.Username}</p>
                 </Link>
                 <div onClick={() => setLoggedIn(false)} className="link">
                     <LogoutRoundedIcon /> <p>Log out</p>
