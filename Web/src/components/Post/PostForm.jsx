@@ -9,11 +9,11 @@ import PropTypes from 'prop-types';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { RefetchContext } from './PostsList';
 
-export function PostForm({ type, post = {} }) {
+export function PostForm({ type, post = { Content: null, Visibility: 'public' } }) {
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient();
     const { reset, formState, register, handleSubmit } = useForm();
-    const { id } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const refetchPosts = useContext(RefetchContext);
 
     const { mutate, isPending } = useMutation({
@@ -28,13 +28,12 @@ export function PostForm({ type, post = {} }) {
     });
 
     async function onSubmit(data) {
-        if (type === 'new')
-            mutate({ idKorisnik: id, content: data.content, visibility: data.visibility ? 'public' : 'followers' });
+        if (type === 'new') mutate({ idKorisnik: user.id, content: data.content, visibility: data.visibility });
         else
             mutate({
                 idPost: post.PostID,
                 content: data.content,
-                visibility: data.visibility ? 'public' : 'followers',
+                visibility: data.visibility,
             });
     }
     return (
@@ -63,25 +62,25 @@ export function PostForm({ type, post = {} }) {
                                     </div>
 
                                     <textarea
-                                        {...register(
-                                            'content',
-                                            { value: post.Content },
-                                            { required: true, minLength: 1, maxLength: 281 },
-                                        )}
+                                        defaultValue={post.Content}
+                                        {...register('content', {
+                                            required: true,
+                                            minLength: 1,
+                                            maxLength: 281,
+                                        })}
                                         className={formState.errors.content && 'invalid'}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="">Visibility (Followers / Public)</label>
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            {...register('visibility', {
-                                                value: post.Visibility === 'public' ? true : false,
-                                            })}
-                                        />
-                                        <span className="slider round"></span>
-                                    </label>
+                                    <div className="label">
+                                        <label htmlFor="visibility">Visibility</label>
+                                    </div>
+
+                                    <select {...register('visibility')} defaultValue={post.Visibility}>
+                                        <option value="public">Public</option>
+                                        <option value="followers">Followers</option>
+                                        <option value="private">Private</option>
+                                    </select>
                                 </div>
                                 <button type="submit" className="greenButton">
                                     Save

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { loginUser } from '../../services/AuthDataService';
@@ -6,14 +6,16 @@ import { useMutation } from '@tanstack/react-query';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
+import { AuthContext } from './Auth';
 
-export function Login({ setUser, setLoggedIn }) {
+export function Login({ setLoggedIn }) {
     const { formState, register, handleSubmit } = useForm();
+    const { dispatch } = useContext(AuthContext);
 
     const { isError, isPending, mutate } = useMutation({
         mutationFn: loginUser,
         onSuccess: (res) => {
-            setUser(res.user);
+            dispatch({ type: 'SET_USER', payload: res.user });
             setLoggedIn(true);
         },
     });
@@ -70,6 +72,5 @@ export function Login({ setUser, setLoggedIn }) {
 }
 
 Login.propTypes = {
-    setUser: PropTypes.func,
     setLoggedIn: PropTypes.func,
 };

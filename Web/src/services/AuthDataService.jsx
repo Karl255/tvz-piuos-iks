@@ -7,3 +7,7 @@ export async function registerUser(data) {
 export async function loginUser(data) {
     return callApi('POST', 'auth/login', data);
 }
+
+export async function editProfile(data) {
+    return callApi('PUT', 'editProfile', data);
+}

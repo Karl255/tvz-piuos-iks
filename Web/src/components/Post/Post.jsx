@@ -18,7 +18,7 @@ import { PostForm } from './PostForm';
 export function Post({ post, rating }) {
     const [userPostRating, setUserPostRating] = useState(rating ? rating.Value : 0);
     const [postRating, setPostRating] = useState(+post.Rating);
-    const { id, Username } = useContext(AuthContext);
+    const { id, Username } = useContext(AuthContext).user;
     const { pathname } = useLocation();
     const params = useParams();
     const usersPost = pathname.includes('/feed') ? Username === post.Username : +params.id === +id;

@@ -26,12 +26,31 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
-    scrollbar-gutter: stable;
+}
+button,
+select,
+input,
+textarea {
+    font-family: 'Raleway', sans-serif;
 }
 
 ::selection {
     background-color: var(--primary-color);
+}
+::-webkit-scrollbar {
+    background: var(--background-darker);
+    width: 0.7em;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--background);
+    border-radius: var(--border-radius);
+}
+::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+::-webkit-scrollbar-track {
+    background: var(--background-darker);
+    border-radius: var(--border-radius);
 }
 
 body {
@@ -42,6 +61,7 @@ body {
     background-position: center;
     min-height: 100vh;
     margin: 0;
+    overflow-y: scroll;
 }
 
 h3 {
@@ -104,7 +124,8 @@ button:active {
 }
 
 input,
-textarea {
+textarea,
+select {
     border-radius: var(--border-radius);
     background-color: var(--background-darker);
     border: 1px solid var(--background-darker);
@@ -112,6 +133,13 @@ textarea {
     color: var(--text);
     outline: none;
     transition: var(--transition) !important;
+}
+select {
+    padding: var(--button-padding);
+    cursor: pointer;
+}
+option:hover {
+    background: var(--primary-color);
 }
 textarea {
     resize: none;
@@ -162,6 +190,7 @@ label {
 
 .darkerButton {
     background-color: var(--background-darker);
+    border: 0;
     color: var(--text-darker);
 }
 

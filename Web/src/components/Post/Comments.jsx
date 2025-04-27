@@ -15,7 +15,8 @@ export function Comments({ postId, initialNumberOfComments }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [comments, setComments] = useState([]);
-    const { id, Username } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
+    const { id, Username } = user;
     const [numberOfComments, setNumberOfComments] = useState(initialNumberOfComments);
     const [newContent, setNewContent] = useState('');
 
@@ -72,7 +73,7 @@ export function Comments({ postId, initialNumberOfComments }) {
                                 </div>
                             ))
                         ) : (
-                            <div>No comments</div>
+                            <div style={{ color: 'var(--text-darker)' }}>No comments</div>
                         )}
                     </div>
 

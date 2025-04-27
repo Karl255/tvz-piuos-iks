@@ -1,3 +1,32 @@
-h2 {
-    color: var(--primary-color);
+.username {
+    font-size: 1.5em;
+    margin: 0.5em 0;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    height: 87vh;
+}
+.chat ::-webkit-scrollbar-track {
+    background: transparent;
+}
+.messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 1em;
+}
+
+.message {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.messageSelf {
+    background-color: var(--primary-color-trans);
+    margin-left: auto;
 }

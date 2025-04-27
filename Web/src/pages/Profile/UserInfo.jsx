@@ -9,13 +9,20 @@ import { follow, unfollow } from '../../services/ProfileDataService';
 import { useNavigate, useParams } from 'react-router';
 import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import { addChat } from '../../services/ChatsDataService';
+import { useForm } from 'react-hook-form';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import { editProfile } from '../../services/AuthDataService';
 
-export function UserInfo({ user, followers, following }) {
-    const { id } = useContext(AuthContext);
+export function UserInfo({ user, refetch, followers, following }) {
+    const { user: userContext, dispatch } = useContext(AuthContext);
+    const id = userContext.id;
     const params = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [followingStatus, setFollowingStatus] = useState(false);
+    const { register, formState, reset, handleSubmit } = useForm();
+    const [editingUsername, setEditingUsername] = useState(false);
     const isLoggedUser = id === user.id;
 
     const { mutate: setFollow } = useMutation({
@@ -36,7 +43,7 @@ export function UserInfo({ user, followers, following }) {
     const { mutate: createChat } = useMutation({
         mutationFn: addChat,
         onSuccess: (data) => {
-            navigate(`/inbox/chat/${data[0].chatId}`, { state: { username: user.Username } });
+            navigate(`/inbox/chat/${data[0].chatId}`, { state: { username: user.Username, userId: user.id } });
         },
     });
 
@@ -51,12 +58,51 @@ export function UserInfo({ user, followers, following }) {
         else setUnfollow({ idUser: id, idFollow: user.id });
     }
 
+    const { mutate: editUsername } = useMutation({
+        mutationFn: editProfile,
+        onSuccess: (data, variables) => {
+            dispatch({ type: 'SET_USERNAME', payload: variables.username });
+            queryClient.invalidateQueries();
+            setEditingUsername(false);
+
+            refetch();
+        },
+    });
+
+    function onSubmit(data) {
+        editUsername({ idKorisnik: user.id, username: data.username });
+    }
+
     return (
         <Container className="profile section">
             <div className="profileHeader">
-                <h1>
-                    {user.Username} {isLoggedUser && <EditIcon sx={{ cursor: 'pointer' }} />}
-                </h1>
+                {editingUsername ? (
+                    <span>
+                        <form>
+                            <input
+                                type="text"
+                                className={`editUsernameInput ${formState.errors.username ? 'invalidUsername' : ''}`}
+                                defaultValue={user.Username}
+                                {...register('username', { required: true, minLength: 5, maxLength: 20 })}
+                            />
+                            <CheckRoundedIcon className="confirmButton" onClick={handleSubmit(onSubmit)} />
+                            <ClearRoundedIcon
+                                className="cancelButton"
+                                onClick={() => {
+                                    setEditingUsername(false);
+                                    reset();
+                                }}
+                            />
+                        </form>
+                    </span>
+                ) : (
+                    <h1>
+                        {user.Username}{' '}
+                        {isLoggedUser && (
+                            <EditIcon sx={{ cursor: 'pointer' }} onClick={() => setEditingUsername(true)} />
+                        )}
+                    </h1>
+                )}
                 <div className="followersBar">
                     <UsersListModal title={followers.length + ' followers'} list={followers} />
                     <UsersListModal title={following.length + ' following'} list={following} />
@@ -97,6 +143,7 @@ export function UserInfo({ user, followers, following }) {
 
 UserInfo.propTypes = {
     user: PropTypes.object,
+    refetch: PropTypes.func,
     followers: PropTypes.array,
     following: PropTypes.array,
 };

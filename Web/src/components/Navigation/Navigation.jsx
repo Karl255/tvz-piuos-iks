@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Container } from '@mui/material';
 import { Link, Route, Routes, useLocation, Navigate } from 'react-router';
 
 import { Feed } from '../../pages/Feed/Feed';
@@ -15,10 +14,11 @@ import { Chat } from '../../pages/Inbox/Chat';
 import PropTypes from 'prop-types';
 
 export function Navigation({ setLoggedIn }) {
-    const user = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
+
     const { pathname } = useLocation();
     return (
-        <Container>
+        <div>
             <nav>
                 <Link to={{ pathname: '/feed' }} className={'link ' + (pathname.match('/feed') && 'activePage')}>
                     <img src="/logo-white.svg" alt="Iks logo" width="64" height="64" />
@@ -44,7 +44,7 @@ export function Navigation({ setLoggedIn }) {
                 <Route path="/profile/:id" element={<ProfilePage />} />
                 <Route path="/" element={<Navigate to="/feed" />} />
             </Routes>
-        </Container>
+        </div>
     );
 }
 

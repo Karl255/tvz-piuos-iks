@@ -41,3 +41,31 @@
     font-size: smaller;
     transform: scale(0.9) translateY(1px);
 }
+
+.editUsernameInput {
+    border: 0;
+    border-bottom: 2px solid var(--primary-color);
+    border-radius: 0;
+    padding: 0.15em 0;
+    width: 50%;
+    font-size: 2em;
+    background: none;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.confirmButton,
+.cancelButton {
+    color: var(--text-darker);
+    cursor: pointer;
+    transition: var(--transition) !important;
+    transform: translateY(0.25em) scale(1.1);
+}
+.confirmButton:hover {
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+.cancelButton:hover {
+    color: var(--secondary-color);
+    transition: var(--transition);
+}

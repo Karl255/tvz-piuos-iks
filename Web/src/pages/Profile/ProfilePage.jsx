@@ -30,6 +30,7 @@ export function ProfilePage() {
             return {
                 data: results.map((result) => result.data),
                 pending: results.some((result) => result.isPending),
+                refetch: results.map((result) => result.refetch),
             };
         },
     });
@@ -40,7 +41,12 @@ export function ProfilePage() {
                 <LoadingSpinner />
             ) : (
                 <>
-                    <UserInfo user={queries.data[0]} followers={queries.data[1]} following={queries.data[2]} />
+                    <UserInfo
+                        user={queries.data[0]}
+                        refetch={queries.refetch[0]}
+                        followers={queries.data[1]}
+                        following={queries.data[2]}
+                    />
                     <PostsList route={'profilePosts'} userId={params.id} />
                 </>
             )}

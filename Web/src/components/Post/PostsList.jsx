@@ -12,7 +12,7 @@ import { Box } from '@mui/material';
 export const RefetchContext = createContext();
 
 export function PostsList({ route, userId }) {
-    const user = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [filter, setFilter] = useState(route);
     const [sortKey, setSortKey] = useState('Rating');
     const canAddPost = +user.id === +userId;
@@ -86,13 +86,17 @@ export function PostsList({ route, userId }) {
                         </div>
                     </Box>
                     {sortedPosts.map((objava) => {
-                        return (
-                            <Post
-                                key={objava.PostID}
-                                post={objava}
-                                rating={ratings.find((rating) => rating.idPost === objava.PostID)}
-                            />
-                        );
+                        {
+                            return (
+                                !(!canAddPost && objava.Visibility === 'private') && (
+                                    <Post
+                                        key={objava.PostID}
+                                        post={objava}
+                                        rating={ratings.find((rating) => rating.idPost === objava.PostID)}
+                                    />
+                                )
+                            );
+                        }
                     })}
                 </RefetchContext.Provider>
             )}
