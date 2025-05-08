@@ -45,7 +45,7 @@ CREATE TABLE `comment` (
   KEY `fk_Komentar_Objava1_idx` (`idPost`),
   CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Komentar_Objava1` FOREIGN KEY (`idPost`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb3;
 
 /*Table structure for table `follower` */
 
@@ -77,7 +77,7 @@ CREATE TABLE `message` (
   KEY `fk_Poruka_Korisnik1_idx` (`idSender`),
   CONSTRAINT `fk_Poruka_Korisnik1` FOREIGN KEY (`idSender`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_Poruka_Razgovor1` FOREIGN KEY (`idChat`) REFERENCES `chat` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb3;
 
 /*Table structure for table `post` */
 
@@ -92,7 +92,7 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   KEY `fk_Objava_Korisnik_idx` (`idUser`),
   CONSTRAINT `fk_Objava_Korisnik` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3;
 
 /*Table structure for table `rating` */
 
@@ -121,7 +121,7 @@ CREATE TABLE `user` (
   `DateOfBirth` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
 
 /* Procedure structure for procedure `EditPost` */
 
